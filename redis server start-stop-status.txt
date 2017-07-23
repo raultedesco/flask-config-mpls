@@ -1,0 +1,5 @@
+ systemctl status redis_6379
+
+ systemctl start redis_6379
+
+ systemctl stop redis_6379

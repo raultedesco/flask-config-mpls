@@ -1,0 +1,5 @@
+
+srv/tftp
+
+setting in: 
+/etc/default/tftpd-hpa

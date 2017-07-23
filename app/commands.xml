@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<router>
+    <static-route name='static-route'>
+        <value>ip route</value>
+    </static-route>    
+    <protocol name="BGP">
+        <router-bgp>router bgp</router-bgp>
+        <Neigbor>neighbor</Neigbor>
+        <remote-as>remote-as</remote-as>
+        <redistributed>redistribute connected</redistributed>
+        <no-auto-summary>no auto-summary</no-auto-summary>
+    </protocol>        
+    <vrf name="vrf">
+        <name>vrf</name>
+        <vrf-rd>rd</vrf-rd>
+        <vrf-rt>rd</vrf-rt>
+    </vrf>
+    <ip-cef name='ip-cef'>
+        <value>ip cef</value>
+    </ip-cef>
+    <interface name='interface'>
+        <e>ethernet</e>
+        <fe>fastethernet</fe>
+        <ge>gigaethernet</ge>
+        <lo>loopback</lo>    
+        <up> no shutdown </up>
+        <down>shutdown</down>
+    </interface>
+    <ip-address name='ip-address'>
+        <value>ip address</value>
+    </ip-address>
+</router>
