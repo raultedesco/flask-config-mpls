@@ -7,7 +7,7 @@ from snmpcall import *
 def bg_task(id):
     # Chequeo Asyncrono para que no interrumpa las sol de https get o post de la app
     up=''
-    print('id inside bg_task:',id)
+    
     device= Device.query.get(id)
     if ping(device.deviceip):
         print('Levanto!',device.deviceip)
