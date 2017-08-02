@@ -80,6 +80,13 @@ Dashboard
 
  </div>
 <!-- The form which is used to populate the item data -->
+
+
+
+
+
+
+
 <form id="userForm" method="post" action='/' class="form-horizontal" style="display: none;">
     <div class="form-group">
         <label class="col-xs-3 control-label">ID</label>
@@ -90,158 +97,37 @@ Dashboard
     </div>
 
     <div class="form-group">
-            <label class="col-xs-3 control-label">Device Name</label>
+            <label class="col-xs-3 control-label">Device Config</label>
     <div class="col-xs-5">
 
-            {{ wtf.form_field(form.devicename,form_type='inline') }}
+            {{ wtf.form_field(form.dconfig,form_type='inline') }}
     </div>
     </div>
     <div class="form-group">
         <label class="col-xs-3 control-label">Device Rol</label>
         <div class="col-xs-5">
 
-            {{ wtf.form_field(form.devicerol_edit,form_type='inline') }}
+            {{ wtf.form_field(form.dconfig_saved_on,form_type='inline') }}
         </div>
     </div>
 
 
     <div class="form-group">
-        <label class="col-xs-3 control-label">Device S.O.</label>
+        <label class="col-xs-3 control-label">Device Id</label>
         <div class="col-xs-5">
 
-            {{ wtf.form_field(form.deviceso,form_type='inline') }}
+            {{ wtf.form_field(form.dconfig_device_id,form_type='inline') }}
         </div>
     </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device SSHv2</label>
-        <div class="col-xs-5">
 
-            {{ wtf.form_field(form.devicesshv2,form_type='inline') }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device IP</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form.deviceip,form_type='inline') }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device User Login</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form.deviceuserlogin,form_type='inline') }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device User Password</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form.deviceuserpassword,form_type='inline') }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device User Password</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form.deviceenapassword,form_type='inline') }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device SNMP</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form.devicesnmp,form_type='inline') }}
-        </div>
-    </div>
-    <div class="form-group">
-    <div class="form-group">
     <div class="form-group">
         <div class="col-xs-5 col-xs-offset-3">
-            <button type="submit" class="btn btn-primary">Guardar</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
         </div>
     </div>
 </form>
 
 
-
-<form id="addForm" method="post" action='/add' class="form-horizontal" style="display: none;">
-
-    <div class="form-group">
-            <label class="col-xs-3 control-label">Device Name</label>
-    <div class="col-xs-5">
-            {{ form.hidden_tag() }}
-            {{ wtf.form_field(form1.devicename,form_type='inline') }}
-    </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device Rol</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form1.devicerol,form_type='inline') }}
-        </div>
-    </div>
-
-
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device S.O.</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form1.deviceso,form_type='inline') }}
-        </div>
-    </div>
-    <div class="form-group">
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device SSHv2</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form1.devicesshv2,form_type='inline') }}
-        </div>
-    </div>
-        <div class="form-group">
-        <label class="col-xs-3 control-label">Device IP</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form1.deviceip,form_type='inline') }}
-    </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device User Login</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form1.deviceuserlogin,form_type='inline') }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device User Password</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form1.deviceuserpassword,form_type='inline') }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device User Password</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form1.deviceenapassword,form_type='inline') }}
-        </div>
-    </div>
-        <div class="form-group">
-        <label class="col-xs-3 control-label">Device User Password</label>
-        <div class="col-xs-5">
-
-            {{ wtf.form_field(form1.devicesnmp,form_type='inline') }}
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-xs-5 col-xs-offset-3">
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        </div>
-    </div>
-</form>
 
 
 {% endblock %}
@@ -292,7 +178,7 @@ Dashboard
     "sInfoEmpty":      "Mostrando Dispositivos del 0 al 0 de un total de 0 Dispositivos",
     "sInfoFiltered":   "(filtrado de un total de _MAX_ Dispositivos)",
     "sInfoPostFix":    "",
-    "sSearch":         "Buscar Dispositivos:",
+    "sSearch":         "Buscar en Configuraciones:",
     "sUrl":            "",
     "sInfoThousands":  ",",
     "sLoadingRecords": "Cargando...",
@@ -309,42 +195,7 @@ Dashboard
 
         },
         buttons: [  
-                    {
-                    text: '<i class="glyphicon glyphicon-plus">Nuevo</i>', titleAttr: 'Nuevo Device',
-                    action: function () {
-
-                    //bootbox.alert('Datos Seleccionados:'+data);                   
-                    //alert( 'Datos Seleccionados:'+data ) ;
-                    bootbox.dialog({
-                    title: 'Ingresar Datos del Dispositivo ',
-                    message: $('#addForm'),
-                    show: true // We will show it manually later
-                                  })
-                                    .on('shown.bs.modal', function() {
-                                        $('#addForm').show();// Show the login form
-                                        $('input[name="id"]').val('');
-                                        $('input[name="username"]').val('');
-                                        $('input[name="mail"]').val('');
-                                      })
-                                       .on('hide.bs.modal', function(e) {
-                    // Bootbox will remove the modal (including the body which contains the login form)
-                    // after hiding the modal
-                    // Therefor, we need to backup the form
-                                        $('#addForm').hide().appendTo('body'); 
-                                        table.ajax.reload();
-
-
-
-                                          })
-                                          .modal('show');
-
-
-                                         
-
-                    
-                            }
-                    },
-                
+                 
                     {text: '<i class="glyphicon glyphicon-remove">Eliminar</i>', titleAttr: 'Eliminar',
                     action: function () {
 
@@ -460,62 +311,9 @@ Dashboard
                                             }
                                          }       
 
-                    },
-
-                    {text:'<i class="glyphicon glyphicon-cog">Configurar</i>' ,titleAttr: 'Configurar',
-                    action: function (  ) {
-                    //window.location = "/devices"; <img src=static\images\p48.png>
-
-                    if( table.rows( { selected: true } ).count()>0){
-                                        var data = table.row( { selected: true } ).data();
-                                        var selectedrow=table.row( { selected: true } );
-                                        //console.log(selectedrow);
-                                        var id = {id:data[0]}
-                                        var rol = {rol:data[3]}
-                                        console.log(id['id'])
-                                        if( rol['rol']=='P'){
-                                                window.location = "/device_p/"+id['id']
-
-                                        }
-                                         if( rol['rol']=='PE'){
-                                                window.location = "/device_pe/"+id['id']
-
-                                        }
-                                         if( rol['rol']=='CPE'){
-                                                 window.location = "/device_cpe/"+id['id']
-                                                 
-                                                 
-
-                                        }
-                                      
-                                       
-
-                       /*                  $.ajax({
-                                                    type: 'POST',
-                                                    url: url,
-                                                    data: JSON.stringify(id),
-                                                    dataType: 'json',
-                                                    contentType: 'application/json; charset=utf-8',
-                                                    success: function(evt) {
-                                                     
-                                                        }
-                                                })*/
-
-
-                                        
-
-
-                            }
-                            else{
-                                bootbox.alert('Debe seleccionar un Dispositivo')
-                            }
-
-
-
-
-
-                                    }
                     }
+
+                   
 
                 ],
 
@@ -523,10 +321,11 @@ Dashboard
         //"sDom": "<'row-fluid'<'span6 toolbar'><'span6'>r>t<'row-fluid'<'span6'f><'span6'p>>",
         "bProcessing": true,
         "bjQueryUI": true,
-        "sAjaxSource": "{{ url_for('_server_data') }}",
+        "sAjaxSource": "{{ url_for('_server_data_config') }}",
         
        });
 
+         devicemonitor(table);
 
     
    
@@ -535,6 +334,72 @@ Dashboard
 
 } ); 
 
+
+</script>
+
+
+<script>
+    
+ function devicemonitor(data){
+    table = data;
+
+    $( "#devicemonitor" ).click(function() {
+
+        if( table.rows( { selected: true } ).count()>0){
+              
+                                        var data = table.row( { selected: true } ).data();
+                                        console.log(data[0]);
+                                        //alert('data:'+data[0]);
+                                        var id = data[0];
+                                        window.location = "/monitor/"+id;
+                                        return false;
+                                        
+
+    }
+     else{
+        
+
+        bootbox.alert('Para poder monitorear un Dispositivo debe seleccionarlo primero!');
+        return false;
+    }
+   
+    });
+
+
+ };
+
+</script>>
+
+<script>
+    
+
+        $(document).ready(function() {
+        $('#addForm').submit(function (e) {
+            var url = "{{ url_for('add') }}"; // send the form data here.
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('#addForm').serialize(), // serializes the form's elements.
+                success: function (data) {
+                    console.log(data);  // display the returned data in the console.
+                    //$('#userForm').modal('hide');
+                    $('#addForm').parents('.bootbox').modal('hide');
+                    bootbox.alert(data.data);
+
+
+                }
+            });
+            e.preventDefault(); // block the traditional submission of the form.
+        });
+        // Inject our CSRF token into our AJAX request.
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+                }
+            }
+        })
+    }); 
 
 </script>
 

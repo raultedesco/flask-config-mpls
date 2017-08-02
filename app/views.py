@@ -69,6 +69,13 @@ def dashboard():
     return render_template('dashboard.html', name=current_user.username, columnas=columns,form=form,form1=form1)
     #**locals(),
 
+
+@app.route('/configs_backup', methods=['GET','POST'])
+@login_required
+def configs_backup():
+    form = ModalFormViewConfig()
+    return render_template('configs_backup.html',name=current_user.username, columnas=config_columns, form=form )
+
 @app.route('/device_p/<device>')
 def devices_p(device):
         
@@ -381,6 +388,13 @@ def bgp(device):
         
     return render_template('bgp.html', form=form, device=device)
 
+@app.route('/monitor/<device>',methods=['GET', 'POST'])
+def monitor(device):
+
+       
+    return render_template('monitor.html', device=device)
+
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -451,6 +465,7 @@ def config():
     return 'pagina de configuracion'
 
 columns = ['ID', 'Image','Device Name', 'ROL', 'SO', 'SSHv2','IP','Device User login']
+config_columns = ['ID','Device Configuration', 'Saved On', 'Device Id']
 
 @app.route('/_server_data')
 def _server_data():
@@ -472,6 +487,23 @@ def _server_data():
         collection.append(dict(zip(columns, [all[i].id,device_image_rol,all[i].devicename, all[i].devicerol,all[i].deviceso,all[i].devicesshv2,all[i].deviceip,all[i].deviceuserlogin])))
 
     results = BaseDataTables(request, columns, collection).output_result()
+
+    # return the results as a string for the datatable
+    return json.dumps(results)
+
+
+@app.route('/_server_data_config')
+def _server_data_config():
+   
+    all = DeviceConfig.query.all()
+    
+
+  
+    collection=[]
+    for i in range(len(all)):
+        collection.append(dict(zip(config_columns, [all[i].id,all[i].devicecurrentconfig , all[i].deviceconfig,all[i].device_id])))
+
+    results = BaseDataTables(request, config_columns, collection).output_result()
 
     # return the results as a string for the datatable
     return json.dumps(results)
@@ -509,7 +541,32 @@ def check_device():
             print (result[1])
             return jsonify(status=result[0],interfaces_snmp=result[1])
 
-    return 'ok' 
+@app.route('/load_ip_brief_and_routes',methods=['GET','POST'])  
+def load_ip_brief_and_routes():
+    id = request.json
+    device= Device.query.get(id)
+    if ping(device.deviceip):
+
+        c = SendCommands()
+        print(c.connecting(device.deviceuserlogin,device.deviceip,device.devicepassword,device.devicepasswordena))
+                       
+        
+        if not c.error_desc == 'Error de Autenticacion':
+            print('passwords correctos')
+     
+            check_ip_brief,check_ip_route = c.ip_brief_and_routes()
+            return jsonify(check_ip_brief=format(check_ip_brief), check_ip_route=format(check_ip_route))
+
+
+        else:
+            output='Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
+            return jsonify(data=output)
+        return jsonify(data='algo fallo')
+
+            
+    else:
+        return jsonify(data='El estado del dispositivo es Down! verifique conectividad IP...')   
+  
 
 def flash_errors(form):
     for field, errors in form.errors.items():

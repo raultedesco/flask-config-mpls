@@ -47,9 +47,11 @@ Devices Configuration
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Static Route</a></li>
-    <li><a href="{{url_for('command',command='bgp',device=device)}}">Protocol BGP</a></li>
-    <li><a href="#">Protocol EIGRP</a></li>
+    <li><a href="{{url_for('command',command='eigrp',device=device)}}">Protocol OSPF</a></li>
+    <li><a href="{{url_for('command',command='bgp',device=device)}}">Protocol eBGP</a></li>
+    <li><a href="{{url_for('command',command='bgp',device=device)}}">Protocol iBGP</a></li>
+    <li><a href="{{url_for('command',command='bgp',device=device)}}">Protocol MPLS/VRF</a></li>
+    <li><a href="{{url_for('command',command='interfaces',device=device)}}">Interfaces VRF</a></li>
     <li><a href="{{url_for('command',command='interfaces',device=device)}}">Interfaces</a></li>
     <li role="separator" class="divider"></li>
     <li><a href="#">Save Config</a></li>
@@ -139,7 +141,7 @@ Devices Configuration
 <script>
     $(document).ready(function() {
         $('form').submit(function (e) {
-            var url = "{{ url_for('show_result') }}"; // send the form data here.
+            var url = "{{ url_for('show_result_static_route') }}"; // send the form data here.
             $.ajax({
 
                 type: "POST",

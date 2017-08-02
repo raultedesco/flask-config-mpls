@@ -262,6 +262,21 @@ class SendCommands(ConnectDevice):
             executed_vrf+=check_vrf
 
             return executed_vrf
+
+
+      def ip_brief_and_routes(self):
+            # Establecer Modo Ena
+            self.net_connect.enable()
+            
+            # Armar Comando
+            show_ip_interface_brief='show ip interface brief'
+            show_ip_route='show ip route'
+            # Ejecutar Comando
+            check_ip_brief= self.net_connect.send_command(show_ip_interface_brief)
+            
+            check_ip_route= self.net_connect.send_command(show_ip_route)
+            
+            return check_ip_brief,check_ip_route
    
 
 # public String cbgpMPLS(CurrentConfig c1)

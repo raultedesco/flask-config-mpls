@@ -54,6 +54,12 @@ class DeviceBD(FlaskForm):
     device_so=StringField('SO',validators=[InputRequired()])
     device_ssh=StringField('SSH Version',validators=[InputRequired()])
 
+class ModalFormViewConfig(FlaskForm):
+    id=StringField('Id')
+    dconfig = StringField('Device Config')
+    dconfig_saved_on = StringField('Saved On')
+    dconfig_device_id = StringField('Device Id')
+
 class ModalFormEdit(FlaskForm):
     id = StringField('Id from wtf')
     devicename = StringField('Device Name')
