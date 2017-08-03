@@ -8,7 +8,7 @@ http://markcell.github.io/jquery-tabledit/ (Libreria Jquery - in line edit table
 
 https://github.com/ktbyers/netmiko (Libreria para automatizar comandos cisco via SSH)
 
-http://getbootstrap.com/ (Framwork para Desarrollo de Web)
+http://getbootstrap.com/ (Framwork para Desarrollo Web)
 
 http://flask.pocoo.org/ (Flask is a microframework for Python based on Werkzeug, Jinja 2 and good intentions)
 
