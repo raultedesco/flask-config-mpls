@@ -1,6 +1,6 @@
 #flask-config-mpls
 
-Referencias y Creditos 
+Creditos
 
 https://prettyprinted.com/ (Tutoriales sobre Flask )
 
