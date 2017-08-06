@@ -528,7 +528,7 @@ Dashboard
        });
 
 
-    
+       monitor(table);
    
 
 
@@ -571,7 +571,35 @@ Dashboard
 
 </script>
 
+<script>
+    
+function monitor(table){
+    
+        $('#devicemonitor').click(function(){
+            console.log('table'+table.data);
 
+
+           if( table.rows( { selected: true } ).count()>0){
+              var data = table.row( { selected: true } ).data();
+              var id = {id:data[0]};
+
+              window.location = "/monitor/"+id['id']
+
+         };
+             bootbox.alert('Debe seleccionar un Dispositivo')
+             return false;    
+                        
+
+        });
+
+     
+    };
+
+
+
+
+
+</script>
     
 
 {% endblock %}
