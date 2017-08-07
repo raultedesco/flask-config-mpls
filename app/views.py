@@ -495,6 +495,7 @@ def _server_data():
 @app.route('/_server_data_config')
 def _server_data_config():
    
+    #consulta todos los registros de la base deviceconfig
     all = DeviceConfig.query.all()
 
     
