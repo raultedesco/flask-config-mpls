@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import InputRequired, Email, Length, IPAddress, DataRequired
 
 
@@ -56,9 +56,8 @@ class DeviceBD(FlaskForm):
 
 class ModalFormViewConfig(FlaskForm):
     id=StringField('Id')
-    dconfig = StringField('Device Config')
-    dconfig_saved_on = StringField('Saved On')
-    dconfig_device_id = StringField('Device Id')
+    #dconfig = StringField('Device Config')
+    dconfig = TextAreaField(u'Device Config')
 
 class ModalFormEdit(FlaskForm):
     id = StringField('Id from wtf')

@@ -496,6 +496,7 @@ def _server_data():
 def _server_data_config():
    
     all = DeviceConfig.query.all()
+
     
 
   

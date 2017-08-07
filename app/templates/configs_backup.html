@@ -49,7 +49,7 @@ Dashboard
             <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><a id="devicemonitor" href=""><img src=static\images\monitor.png> Device-Monitor</a></li>
+            <li><a id="devicemonitor" href="{{url_for('dashboard')}}"><img src=static\images\monitor.png> Dashboard </a></li>
             <li><a id="configlog" href=""><img src=static\images\log.png> Config-Log</a></li>
             <li><a id="configbackup" href=""><img src=static\images\backup.png> Config-Backup</a></li>
           </ul>
@@ -63,7 +63,7 @@ Dashboard
           <h1 class="page-header" style="padding-top: 9px">Bienvenido, {{ name }}!</h1>
 
  
- <table id="example" class="table table-condensed" cellspacing="0" width="100%">
+ <table id="config_table" class="table table-condensed" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     {% for col in columnas %}
@@ -100,25 +100,14 @@ Dashboard
             <label class="col-xs-3 control-label">Device Config</label>
     <div class="col-xs-5">
 
-            {{ wtf.form_field(form.dconfig,form_type='inline') }}
-    </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device Rol</label>
-        <div class="col-xs-5">
+            {{ wtf.form_field(form.dconfig,form_type='inline',style='margin: 0px -138.844px 0px 0px; width: 387px; height: 283px;') }}
 
-            {{ wtf.form_field(form.dconfig_saved_on,form_type='inline') }}
-        </div>
+
+    </div>
     </div>
 
 
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Device Id</label>
-        <div class="col-xs-5">
 
-            {{ wtf.form_field(form.dconfig_device_id,form_type='inline') }}
-        </div>
-    </div>
 
     <div class="form-group">
         <div class="col-xs-5 col-xs-offset-3">
@@ -159,7 +148,7 @@ Dashboard
 
 
     var events = $('#events');
-    var table = $('#example').DataTable( {
+    var table = $('#config_table').DataTable( {
         dom: 'Bfrtip',
         select: {
             style: 'single'
@@ -259,7 +248,7 @@ Dashboard
 
                     },
                 
-                    {text: '<i class="glyphicon glyphicon-edit">Editar</i>', titleAttr: 'Editar',
+                    {text: '<i class="glyphicon glyphicon-edit">Ver</i>', titleAttr: 'Ver',
                     action: function () {
 
                     if( table.rows( { selected: true } ).count()>0){
@@ -277,16 +266,9 @@ Dashboard
                                         $('#userForm')                                          
                                                                     .show();// Show the login form
                                         $('input[name="id"]').val(data['0']);
-                                        $('input[name="devicename"]').val(data['2']);
-                                        $('#devicerol_edit').val(data['3']);
-                                        $('input[name="deviceso"]').val(data['4']);
-                                        $ ('input[name="devicesshv2"]').val(data['5']);
-                                        $ ('input[name="deviceip"]').val(data['6']);
-                                        $('input[name="deviceuserlogin"]').val(data['7']);
-                                        $('input[name="deviceuserpassword"]').val(data['8']);
-                                        $('input[name="deviceenapassword"]').val(data['9']);
-                                        
+                                        $('textarea[name="dconfig"]').val(data['1']);
 
+                            
                                         console.log(data)
                                       })
                                         .on('hide.bs.modal', function(e) {
@@ -325,7 +307,7 @@ Dashboard
         
        });
 
-         devicemonitor(table);
+
 
     
    
@@ -337,38 +319,6 @@ Dashboard
 
 </script>
 
-
-<script>
-    
- function devicemonitor(data){
-    table = data;
-
-    $( "#devicemonitor" ).click(function() {
-
-        if( table.rows( { selected: true } ).count()>0){
-              
-                                        var data = table.row( { selected: true } ).data();
-                                        console.log(data[0]);
-                                        //alert('data:'+data[0]);
-                                        var id = data[0];
-                                        window.location = "/monitor/"+id;
-                                        return false;
-                                        
-
-    }
-     else{
-        
-
-        bootbox.alert('Para poder monitorear un Dispositivo debe seleccionarlo primero!');
-        return false;
-    }
-   
-    });
-
-
- };
-
-</script>>
 
 <script>
     
