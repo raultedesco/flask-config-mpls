@@ -12,6 +12,10 @@ http://getbootstrap.com/ (Framwork para Desarrollo Web)
 
 http://flask.pocoo.org/ (Flask is a microframework for Python based on Werkzeug, Jinja 2 and good intentions)
 
+http://wtforms.readthedocs.io/en/latest/ ( Generador de Formularios Web)
+
+https://pythonhosted.org/Flask-Bootstrap/forms.html
+
 http://www.bootply.com/128062 (CSS Animate Loading Icon Button)
 
 http://gns3.com/ (Emulador de Hardware cisco)
