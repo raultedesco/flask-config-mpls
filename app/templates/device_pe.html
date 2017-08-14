@@ -51,8 +51,9 @@ Devices Configuration
     <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-transfer"></i> eBGP VRF</a></li>
     <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-cloud-upload"></i> iBGP MPLS</a></li>
     <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-send"></i> iBGP extended community</a></li>
-    <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-unchecked"></i> VRF</a></li>
-    <li><a href="{{url_for('command',command='interfaces',device=device)}}"><i class="glyphicon glyphicon-object-align-horizontal"></i> Interfaces VRF</a></li>
+    <li><a href="{{url_for('command',command='vrf',device=device)}}"><i class="glyphicon glyphicon-unchecked"></i> VRF</a></li>
+    <li><a href="{{url_for('command',command='interfaces_vrf',device=device)}}"><i class="glyphicon glyphicon-object-align-horizontal"></i> Interfaces VRF</a></li>
+    <li><a href="{{url_for('command',command='interfaces_mpls',device=device)}}"><i class="glyphicon glyphicon-object-align-horizontal"></i> Interfaces MPLS IP</a></li>
     <li><a href="{{url_for('command',command='interfaces',device=device)}}"><i class="glyphicon glyphicon-object-align-vertical"></i> Interfaces</a></li>
     <li role="separator" class="divider"></li>
     <li><a href="#"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>

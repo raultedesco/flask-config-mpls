@@ -376,6 +376,42 @@ def show_result_ospf():
     return jsonify(data='Error en la validacion de los datos!')
 
 
+@app.route('/show_result_vrf', methods=['GET', 'POST'])
+def show_result_vrf():
+    form = Vrf()
+    #print('static route id',form.id.data)
+    if form.validate_on_submit():
+        device = Device.query.get(form.id.data)
+        if ping(device.deviceip):
+
+            c = SendCommands()
+            print(c.connecting(device.deviceuserlogin, device.deviceip,
+                               device.devicepassword, device.devicepasswordena))
+
+            # c.connecting('raul','192.168.10.110','cisco','cisco')
+            if not c.error_desc == 'Error de Autenticacion':
+                # print(c.net_connect.find_prompt())
+                output = c.vrf(form.vrf_name.data, form.vrf_rd.data, form.vrf_rt.data)
+                #output= c.net_connect.find_prompt()
+            else:
+                output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
+            #new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            #new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+            return jsonify(data=format(output))
+
+            return jsonify(data=format(out))
+        else:
+            return jsonify(data='El estado del dispositivo es Down! verifique conectividad IP...')
+    else:
+        # flash_errors(form)
+        # return jsonify(ip_destino=form.ip_destino.errors, mascara=form.mascara.errors, next_hop=form.next_hop.errors)
+        return jsonify(error1=form.ospf_process.errors, error2=form.ospf_network.errors, error3=form.ospf_area.errors)
+
+    return jsonify(data='Error en la validacion de los datos!')
+
+
 @app.route('/user/<username>')
 def show_user_profile(username):
     # show the user profile for that user
@@ -395,6 +431,12 @@ def bgp(device):
 def monitor(device):
 
     return render_template('monitor.html', device=device)
+
+
+@app.route('/vrf/<device>', methods=['GET', 'POST'])
+def vrf(device):
+    form = Vrf()
+    return render_template('vrf.html', form=form, device=device)
 
 
 @app.route('/logout')

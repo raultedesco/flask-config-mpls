@@ -1,0 +1,6 @@
+
+Username: osboxes
+Password: osboxes.org
+Root Account Password: osboxes.org
+VB Guest Additions & VMware Tools: Not Installed
+VMware Compatibility: Version 12+

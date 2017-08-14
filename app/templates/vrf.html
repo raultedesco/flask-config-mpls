@@ -93,20 +93,15 @@ Devices Configuration
 
     <div class="form-group">
 
-        {{ wtf.form_field(form.bgp_process) }}
+        {{ wtf.form_field(form.vrf_name) }}
     </div>
     <div class="form-group">
-        {{ wtf.form_field(form.bgp_as) }}
+        {{ wtf.form_field(form.vrf_rd) }}
     </div>
     <div class="form-group">
-        {{ wtf.form_field(form.bgp_neighbor) }}
+        {{ wtf.form_field(form.vrf_rt) }}
     </div>
-    <div class="form-group">
-        {{ wtf.form_field(form.bgp_network) }}
-    </div>
-    <div class="form-group">
-        {{ wtf.form_field(form.bgp_mascara) }}
-    </div>
+
 
 
 
@@ -164,7 +159,7 @@ Devices Configuration
   <script>
     $(document).ready(function() {
         $('form').submit(function (e) {
-            var url = "{{ url_for('show_result_bgp') }}"; // send the form data here.
+            var url = "{{ url_for('show_result_vrf') }}"; // send the form data here.
             $.ajax({
 
                 type: "POST",
