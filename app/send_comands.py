@@ -53,12 +53,8 @@ class SendCommands(ConnectDevice):
         command_bgp_network = bgp_network + space + network_ip
         command_bgp_neighbor = bgp_neighbor + space + neighbor_ip + space + bgp_remote_as + space + remote_as
         # command_bgp_end='end'
-        # command_bgp_check_impact='show running-config partition router 100'
 
         config_commands_bgp = [command_bgp]
-
-        # config_commands_bgp_neighbor = [command_bgp_neighbor]
-        # config_commands_bgp_remote_as = [command_bgp_network]
         config_commands_bgp.append(command_bgp_neighbor)
         config_commands_bgp.append(command_bgp_network)
         # config_commands_bgp.append(command_bgp_end)
