@@ -47,14 +47,15 @@ Devices Configuration
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="{{url_for('command',command='eigrp',device=device)}}">Protocol OSPF</a></li>
-    <li><a href="{{url_for('command',command='bgp',device=device)}}">Protocol eBGP</a></li>
-    <li><a href="{{url_for('command',command='bgp',device=device)}}">Protocol iBGP</a></li>
-    <li><a href="{{url_for('command',command='bgp',device=device)}}">Protocol MPLS/VRF</a></li>
-    <li><a href="{{url_for('command',command='interfaces',device=device)}}">Interfaces VRF</a></li>
-    <li><a href="{{url_for('command',command='interfaces',device=device)}}">Interfaces</a></li>
+    <li><a href="{{url_for('command',command='eigrp',device=device)}}"><i class="glyphicon glyphicon-random"></i> Protocol OSPF</a></li>
+    <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-transfer"></i> eBGP VRF</a></li>
+    <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-cloud-upload"></i> iBGP MPLS</a></li>
+    <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-send"></i> iBGP extended community</a></li>
+    <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-unchecked"></i> VRF</a></li>
+    <li><a href="{{url_for('command',command='interfaces',device=device)}}"><i class="glyphicon glyphicon-object-align-horizontal"></i> Interfaces VRF</a></li>
+    <li><a href="{{url_for('command',command='interfaces',device=device)}}"><i class="glyphicon glyphicon-object-align-vertical"></i> Interfaces</a></li>
     <li role="separator" class="divider"></li>
-    <li><a href="#">Save Config</a></li>
+    <li><a href="#"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
   </ul>
 
   <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label>
@@ -72,7 +73,7 @@ Devices Configuration
       <li class="list-group-item" id="deviceip">Direccion IP:</li>
       <li class="list-group-item" id="devicerol">Rol:</li>
       <li class="list-group-item" id="devicestatus">Status:</li>
-                
+
   </ul>
 
 
@@ -87,26 +88,26 @@ Devices Configuration
 
 <form method="POST" action="/devices">
     <div class="form-group">
-        {{ form.hidden_tag() }} 
-        
+        {{ form.hidden_tag() }}
+
         {{ wtf.form_field(form.id,readonly=True, value=device) }}
 
     </div>
 
   <div class="form-group">
-          
+
         {{ wtf.form_field(form.ip_destino) }}
   </div>
   <div class="form-group">
-        {{ wtf.form_field(form.mascara) }} 
+        {{ wtf.form_field(form.mascara) }}
   </div>
   <div class="form-group">
-        {{ wtf.form_field(form.next_hop) }} 
+        {{ wtf.form_field(form.next_hop) }}
   </div>
 
 
   <button type="submit" class="btn btn-primary">Configurar</button>
-  
+
 </form>
 
 </div>
@@ -120,8 +121,8 @@ Devices Configuration
 
 
   </div>
-       
-      <div id='response' style="display: none"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>Ejecutando Comandos...<span></div>  
+
+      <div id='response' style="display: none"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>Ejecutando Comandos...<span></div>
 
 </div>
 
@@ -155,14 +156,14 @@ Devices Configuration
                     $('#response').fadeOut();
 
                    validate_errors(data);
-                    
+
 
                 },
                 beforeSend: function(xhr, settings) {
-               
+
                $('#response').fadeIn();
 
-               
+
                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                     xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
                 }
@@ -176,7 +177,7 @@ Devices Configuration
         // Inject our CSRF token into our AJAX request.
 
     });
-</script> 
+</script>
 
 <script>
   function loadajax(){
@@ -189,15 +190,15 @@ Devices Configuration
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8'
             }).done(function(data) {
-                 console.log(data['deviceip']); 
-                 var valores = data['devicename'] + data['deviceip']+data['devicerol'] 
+                 console.log(data['deviceip']);
+                 var valores = data['devicename'] + data['deviceip']+data['devicerol']
 
                  $('#devicename').html('Nombre del Dispositivo:'+data['devicename'])
                  $('#deviceip').html('Direccion IP:'+data['deviceip'])
                  $('#devicerol').html('Rol:'+data['devicerol'])
                  $('#devicestatus').html('Status:'+data['status'])
                  $('#response').fadeOut();
-                
+
             });
             //$('input[name="id"]').val({{device}})
   };
@@ -223,10 +224,10 @@ Devices Configuration
                    $("#panelchange").addClass('panel-success');
                    $('#devicestatus').text('Status:'+data['status'])
                    $('#response').fadeOut();
-                 } 
-                 
-                 
-                
+                 }
+
+
+
             });
   };
 $(function(){
@@ -235,7 +236,7 @@ $(function(){
 $(function(){
     setInterval(check_with_ajax,5000);
 });
-  
+
 </script>
 
 <script>
@@ -248,14 +249,14 @@ var buffer="";
     $('#message-text').text(data.data);
 
       }
-    $.each(data, function(index, val){ 
+    $.each(data, function(index, val){
 
-      for(var i=0; i < val.length; i++){ 
-        var item = val[i]; 
+      for(var i=0; i < val.length; i++){
+        var item = val[i];
         console.log(item.name);
-        buffer+="<li>"+data[index]+"</li>" ; 
-      } 
-      
+        buffer+="<li>"+data[index]+"</li>" ;
+      }
+
     });
   if(data.data==down){
 
@@ -269,12 +270,12 @@ if (typeof data.error1 === "undefined" || typeof data.error2 === "undefined"  ||
     console.log('error es undefined:'+data.error1);
     console.log('error es undefined:'+data.error2);
     console.log('error es undefined:'+data.error3);
-    
-  
-        } 
+
+
+        }
   else{bootbox.alert('Erros Msg:'+buffer);}
 
 };
 </script>
-          
+
 {% endblock %}

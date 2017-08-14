@@ -5,7 +5,7 @@ from flask_login import LoginManager
 from flask_admin import Admin
 from tasks_celery import make_celery
 
-app=Flask(__name__)
+app = Flask(__name__)
 app.config.from_pyfile('config.py')
 Bootstrap(app)
 db = SQLAlchemy(app)
@@ -16,14 +16,11 @@ admin = Admin(app)
 celery = make_celery(app)
 
 #celery = Celery(app.name, backend=app.config['CELERY_RESULT_BACKEND'], broker=app.config['CELERY_BROKER_URL'])
-#celery.conf.update(app.config)
+# celery.conf.update(app.config)
 
 from views import *
 from models import *
 
 
-if __name__=='__main__':
-	app.run(host='0.0.0.0', debug=True, port=12345, use_reloader=True, threaded=True) 	
-
-
-
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', debug=True, port=12345, use_reloader=True, threaded=True)

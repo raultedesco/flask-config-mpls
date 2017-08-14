@@ -47,11 +47,11 @@ Devices Configuration
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    
-    <li><a href="{{url_for('dashboard')}}"">Dashboard</a></li>
-    <li><a href="javascript:history.go(-1)">Volver</a></li>
+
+    <li><a href="{{url_for('dashboard')}}""><i class="glyphicon glyphicon-globe"></i> Dashboard</a></li>
+    <li><a href="javascript:history.go(-1)"><i class="glyphicon glyphicon-arrow-left"></i> Volver</a></li>
     <li role="separator" class="divider"></li>
-    <li><a href="#">Save Config</a></li>
+    <li><a href="#"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
   </ul>
 
   <!-- <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label> -->
@@ -70,7 +70,7 @@ Devices Configuration
       <li class="list-group-item" id="devicerol">Rol:</li>
       <li class="list-group-item" id="devicesnmp">SNMP Comunity:</li>
       <li class="list-group-item" id="devicestatus">Status:</li>
-                
+
   </ul>
 
 
@@ -85,27 +85,27 @@ Devices Configuration
 
 <form method="POST" action="/devices">
     <div class="form-group">
-        {{ form.hidden_tag() }} 
-        
+        {{ form.hidden_tag() }}
+
         {{ wtf.form_field(form.id,readonly=True, value=device) }}
 
     </div>
 
     <div class="form-group">
-          
+
         {{ wtf.form_field(form.eigrp_process) }}
     </div>
     <div class="form-group">
-        {{ wtf.form_field(form.eigrp_network) }} 
+        {{ wtf.form_field(form.eigrp_network) }}
     </div>
     <div class="form-group">
-        {{ wtf.form_field(form.eigrp_mascara) }} 
+        {{ wtf.form_field(form.eigrp_mascara) }}
     </div>
-    
+
 
 
   <button type="submit" class="btn btn-primary">Configurar</button>
-  
+
 </form>
 
 </div>
@@ -121,14 +121,14 @@ Devices Configuration
   <!-- List group -->
 <div class="panel-body">
 
-  
+
 
     <textarea class="form-control" id="message-text" style="height: 290px ; border: none"></textarea>
 
 
-  
 
-    
+
+
   </div>
 
 
@@ -138,7 +138,7 @@ Devices Configuration
 
 
 
-      <div id='response' style="display: none"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>Ejecutando Comandos...<span></div>  
+      <div id='response' style="display: none"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>Ejecutando Comandos...<span></div>
 
 </div>
 
@@ -178,14 +178,14 @@ Devices Configuration
                        bootbox.alert('Error:'+data['ip_destino']+'--'+data['mascara']+'--'+data['next_hop']);
                     }*/
                    validate_errors(data);
-                    
+
 
                 },
                 beforeSend: function(xhr, settings) {
-               
+
                $('#response').fadeIn();
 
-               
+
                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                     xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
                 }
@@ -199,7 +199,7 @@ Devices Configuration
         // Inject our CSRF token into our AJAX request.
 
     });
-</script> 
+</script>
 
 <script>
   function loadajax(){
@@ -212,8 +212,8 @@ Devices Configuration
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8'
             }).done(function(data) {
-                 console.log(data['deviceip']); 
-                 var valores = data['devicename'] + data['deviceip']+data['devicerol'] 
+                 console.log(data['deviceip']);
+                 var valores = data['devicename'] + data['deviceip']+data['devicerol']
 /*                 $('.list-group').append('<li class="list-group-item">'+'Nombre del Dispositivo:'+data['devicename'] + '</li>')
                  $('.list-group').append('<li class="list-group-item">'+'Direccion IP:'+data['deviceip'] + '</li>')
                  $('.list-group').append('<li class="list-group-item">'+'Rol:'+data['devicerol'] + '</li>')
@@ -230,7 +230,7 @@ Devices Configuration
                  }
                  $('#devicestatus').html('Status:'+data['status'])
                  $('#response').fadeOut();
-                
+
             });
             //$('input[name="id"]').val({{device}})
   };
@@ -256,10 +256,10 @@ Devices Configuration
                    $("#panelchange").addClass('panel-success');
                    $('#devicestatus').text('Status:'+data['status'])
                    $('#response').fadeOut();
-                 } 
-                 
-                 
-                
+                 }
+
+
+
             });
   };
 $(function(){
@@ -268,7 +268,7 @@ $(function(){
 $(function(){
     setInterval(check_with_ajax,5000);
 });
-  
+
 </script>
 
 <script>
@@ -281,14 +281,14 @@ var buffer="";
     $('#message-text').text(data.data);
 
       }
-    $.each(data, function(index, val){ 
+    $.each(data, function(index, val){
 
-      for(var i=0; i < val.length; i++){ 
-        var item = val[i]; 
+      for(var i=0; i < val.length; i++){
+        var item = val[i];
         console.log(item.name);
-        buffer+="<li>"+data[index]+"</li>" ; 
-      } 
-      
+        buffer+="<li>"+data[index]+"</li>" ;
+      }
+
     });
   if(data.data==down){
 
@@ -302,12 +302,12 @@ if (typeof data.error1 === "undefined" || typeof data.error2 === "undefined"  ||
     console.log('error es undefined:'+data.error1);
     console.log('error es undefined:'+data.error2);
     console.log('error es undefined:'+data.error3);
-    
-  
-        } 
+
+
+        }
   else{bootbox.alert('Erros Msg:'+buffer);}
 
 };
 </script>
-          
+
 {% endblock %}

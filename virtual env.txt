@@ -1,0 +1,12 @@
+
+--Crear--
+virtualenv opal
+--activar--
+source my_project/bin/activate
+--desactivar
+deactivate
+-- install requirements without sudo --
+pip3 install -r requirements.txt
+
+
+
