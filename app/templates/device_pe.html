@@ -49,7 +49,7 @@ Devices Configuration
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
     <li><a href="{{url_for('command',command='eigrp',device=device)}}"><i class="glyphicon glyphicon-random"></i> Protocol OSPF</a></li>
     <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-transfer"></i> eBGP VRF</a></li>
-    <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-cloud-upload"></i> iBGP MPLS</a></li>
+    <li><a href="{{url_for('command',command='ibgp_mpls',device=device)}}"><i class="glyphicon glyphicon-cloud-upload"></i> iBGP MPLS</a></li>
     <li><a href="{{url_for('command',command='bgp',device=device)}}"><i class="glyphicon glyphicon-send"></i> iBGP extended community</a></li>
     <li><a href="{{url_for('command',command='vrf',device=device)}}"><i class="glyphicon glyphicon-unchecked"></i> VRF</a></li>
     <li><a href="{{url_for('command',command='interfaces_vrf',device=device)}}"><i class="glyphicon glyphicon-object-align-horizontal"></i> Interfaces VRF</a></li>

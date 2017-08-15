@@ -288,6 +288,57 @@ def show_result_bgp():
     return jsonify(data='Error en la validacion de los datos!')
 
 
+@app.route('/show_result_ibgp_mpls', methods=['GET', 'POST'])
+def show_result_ibgp_mpls():
+    form = ibgp_mpls()
+    #print('static route id',form.id.data)
+    if form.validate_on_submit():
+        device = Device.query.get(form.id.data)
+        if ping(device.deviceip):
+            # falta terminar de configurar
+            # mycall = call()
+            # out = mycall.calling(ip,mask,n_hop)
+            # print(out)
+
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+
+            c = SendCommands()
+            print(c.connecting(device.deviceuserlogin, device.deviceip,
+                               device.devicepassword, device.devicepasswordena))
+            userlogin = device.deviceuserlogin
+            deviceip = device.deviceip
+            devicepassword = device.devicepassword
+            devicepasswordena = device.devicepasswordena
+
+            print(userlogin, deviceip, devicepassword, devicepasswordena)
+            # c.connecting('raul','192.168.10.110','cisco','cisco')
+            if not c.error_desc == 'Error de Autenticacion':
+                # print(c.net_connect.find_prompt())
+                output = c.iBGP_mpls(form.bgp_process.data, form. bgp_neighbor.data,
+                                     form.bgp_as.data, form.bgp_network.data)
+                #output= c.net_connect.find_prompt()
+            else:
+                output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
+            #new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            #new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+            return jsonify(data=format(output))
+
+            return jsonify(data=format(out))
+        else:
+            return jsonify(data='El estado del dispositivo es Down! verifique conectividad IP...')
+    else:
+        # flash_errors(form)
+        # return jsonify(ip_destino=form.ip_destino.errors, mascara=form.mascara.errors, next_hop=form.next_hop.errors)
+        return jsonify(error1=form.bgp_process.errors, error2=form.bgp_as.errors, error3=form.bgp_neighbor.errors, erro4=form.bgp_network, error5=form.bgp_mascara)
+
+    return jsonify(data='Error en la validacion de los datos!')
+
+
 @app.route('/show_result_eigrp', methods=['GET', 'POST'])
 def show_result_eigrp():
     form = DevicesConfigEIGRP()
@@ -425,6 +476,12 @@ def bgp(device):
         return '<h1>OK</h1>'
 
     return render_template('bgp.html', form=form, device=device)
+
+
+@app.route('/ibgp_mpls/<device>', methods=['GET', 'POST'])
+def ibgp_mpls(device):
+    form = ibgp_mpls_form()
+    return render_template('ibgp_mpls.html', form=form, device=device)
 
 
 @app.route('/monitor/<device>', methods=['GET', 'POST'])

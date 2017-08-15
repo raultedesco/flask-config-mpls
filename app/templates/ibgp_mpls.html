@@ -164,7 +164,7 @@ Devices Configuration
   <script>
     $(document).ready(function() {
         $('form').submit(function (e) {
-            var url = "{{ url_for('show_result_bgp') }}"; // send the form data here.
+            var url = "{{ url_for('show_result_ibgp_mpls') }}"; // send the form data here.
             $.ajax({
 
                 type: "POST",
