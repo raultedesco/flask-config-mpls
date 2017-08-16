@@ -94,6 +94,9 @@ Devices Configuration
         {{ wtf.form_field(form.interface) }}
   </div>
   <div class="form-group">
+        {{ wtf.form_field(form.interface_vrf) }}
+  </div>
+  <div class="form-group">
 
         {{ wtf.form_field(form.interface_ip) }}
   </div>
@@ -138,7 +141,7 @@ Devices Configuration
   <script>
     $(document).ready(function() {
         $('form').submit(function (e) {
-            var url = "{{ url_for('show_result_interface' ) }}"; // send the form data here.
+            var url = "{{ url_for('show_result_interface_vrf' ) }}"; // send the form data here.
             $.ajax({
 
                 type: "POST",

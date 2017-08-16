@@ -102,11 +102,9 @@ Devices Configuration
         {{ wtf.form_field(form.bgp_neighbor) }}
     </div>
     <div class="form-group">
-        {{ wtf.form_field(form.bgp_network) }}
+        {{ wtf.form_field(form.bgp_vrf) }}
     </div>
-    <div class="form-group">
-        {{ wtf.form_field(form.bgp_mascara) }}
-    </div>
+
 
 
 
@@ -164,7 +162,7 @@ Devices Configuration
   <script>
     $(document).ready(function() {
         $('form').submit(function (e) {
-            var url = "{{ url_for('show_result_bgp') }}"; // send the form data here.
+            var url = "{{ url_for('show_result_ebgp_vrf') }}"; // send the form data here.
             $.ajax({
 
                 type: "POST",

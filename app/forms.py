@@ -76,6 +76,28 @@ class Vrf(FlaskForm):
         InputRequired(message='Ingrese VRF RT')])
 
 
+class DeviceConfigInterfaces_vrf(FlaskForm):
+    id = StringField('ID')
+    interface = StringField('Interface', validators=[
+                            DataRequired(message='debe ingresar una interface')])
+    interface_vrf = StringField('Interface VRF', validators=[
+        DataRequired(message='debe ingresar una vrf')])
+    interface_ip = StringField('Interface IP', validators=[IPAddress(
+        ipv4=True, ipv6=False, message='IP Destino: IP invalida')])
+    interface_mascara = StringField('Interface Mascara', validators=[DataRequired(message='Si o Si debe ingresar un numero de AS'), Length(
+        min=7, max=15, message='Mascara: debe tener un minimo de 5 y un maximo de 15 caracteres')])
+
+
+class DeviceConfigInterfaces_mpls(FlaskForm):
+    id = StringField('ID')
+    interface = StringField('Interface', validators=[
+                            DataRequired(message='debe ingresar una interface')])
+    interface_ip = StringField('Interface IP', validators=[IPAddress(
+        ipv4=True, ipv6=False, message='IP Destino: IP invalida')])
+    interface_mascara = StringField('Interface Mascara', validators=[DataRequired(message='Si o Si debe ingresar un numero de AS'), Length(
+        min=7, max=15, message='Mascara: debe tener un minimo de 5 y un maximo de 15 caracteres')])
+
+
 class ibgp_mpls_form(FlaskForm):
     id = StringField('ID')
     bgp_process = StringField('Proceso BGP', validators=[
@@ -83,9 +105,25 @@ class ibgp_mpls_form(FlaskForm):
     bgp_as = StringField('BGP AS', validators=[InputRequired(message='Ingrese AS')])
     bgp_neighbor = StringField('BGP Neighbor', validators=[
                                InputRequired(message='Ingrese IP Neighbor')])
-    bgp_network = StringField('BGP Network', validators=[InputRequired(message='Ingrese Network')])
-    bgp_mascara = StringField('BGP Network Mask', validators=[
-                              InputRequired(message='Ingrese Network Mask')])
+
+
+class ibgp_ec_form(FlaskForm):
+    id = StringField('ID')
+    bgp_process = StringField('Proceso BGP', validators=[
+                              InputRequired(message='Ingrese Proceso BGP')])
+    bgp_neighbor = StringField('BGP Neighbor', validators=[
+                               InputRequired(message='Ingrese IP Neighbor')])
+
+
+class ebgp_vrf_form(FlaskForm):
+    id = StringField('ID')
+    bgp_process = StringField('Proceso BGP', validators=[
+                              InputRequired(message='Ingrese Proceso BGP')])
+    bgp_as = StringField('BGP AS', validators=[InputRequired(message='Ingrese AS')])
+    bgp_neighbor = StringField('BGP Neighbor', validators=[
+                               InputRequired(message='Ingrese IP Neighbor')])
+    bgp_vrf = StringField('BGP VRF', validators=[
+        InputRequired(message='Ingrese BGP VRF')])
 
 
 class DeviceBD(FlaskForm):

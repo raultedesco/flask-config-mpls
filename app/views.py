@@ -6,9 +6,9 @@ from flask_login import UserMixin, login_user, login_required, logout_user, curr
 from forms import *
 from models import *
 from datatables import BaseDataTables
-#from .conectRouter import call
+# from .conectRouter import call
 from send_comands import *
-#from .connect_device import *
+# from .connect_device import *
 from snmpcall import *
 from ping import *
 from flask_wtf import FlaskForm
@@ -110,29 +110,19 @@ def command(command, device):
         return render_template('bgp.html', form=form, device=device)
     if command == 'interfaces':
         form = DeviceConfigInterfaces()
-        # chequear posibles errores en la llamada snmp asi como si no esta configurada la comunidad en la db y viene null
-        #device= Device.query.get(device)
-        #s = snmpcall()
-
-        #i = s.interfaces()
-
-        # if  i:
-        #lista = [(y,y) for y in i]
-        # print(lista)
-        # form.interface.choices=[('i1',i[0]),('i2',i[1]),('i3',i[2])]
-        # form.interface.choices=lista
-        # return render_template('interfaces.html',form=form,device=device)
-        # else:
-        #form.interface.choices=[('message', 'fastethernet or ethernet...') ]
         return render_template('interfaces.html', form=form, device=device)
     if command == 'eigrp':
         form = DevicesConfigEIGRP()
         return render_template('eigrp.html', form=form, device=device)
-
     if command == 'ospf':
         form = DevicesConfigOSPF()
         return render_template('ospf.html', form=form, device=device)
-
+    if command == 'interfaces_vrf':
+        form = DeviceConfigInterfaces_vrf()
+        return render_template('interfaces_vrf.html', form=form, device=device)
+    if command == 'interfaces_mpls':
+        form = DeviceConfigInterfaces_mpls()
+        return render_template('interfaces_mpls.html', form=form, device=device)
     return 'Error de Validacion' + command + device
 
 
@@ -146,7 +136,7 @@ def static_route():
 @app.route('/show_result_static_route', methods=['GET', 'POST'])
 def show_result_static_route():
     form = DevicesConfigStaticRoute()
-    #print('static route id',form.id.data)
+    # print('static route id',form.id.data)
     if form.validate_on_submit():
         id_c = form.id.data
         device = Device.query.get(id_c)
@@ -157,9 +147,9 @@ def show_result_static_route():
             # ip=form.ip_destino.data
             # mask=form.mascara.data
             # n_hop=form.next_hop.data
-            #space=' '
-            #mycall = call()
-            #out = mycall.calling(ip,mask,n_hop)
+            # space=' '
+            # mycall = call()
+            # out = mycall.calling(ip,mask,n_hop)
             # print(out)
 
             c = SendCommands()
@@ -175,11 +165,11 @@ def show_result_static_route():
             if not c.error_desc == 'Error de Autenticacion':
                 # print(c.net_connect.find_prompt())
                 output = c.static_route(form.ip_destino.data, form.mascara.data, form.next_hop.data)
-                #output= c.net_connect.find_prompt()
+                # output= c.net_connect.find_prompt()
             else:
                 output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
-            #new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
-            #new_device_config.device= device
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
             # db.session.add(new_device_config)
             # db.session.commit()
             return jsonify(data=format(output))
@@ -196,7 +186,7 @@ def show_result_static_route():
 @app.route('/show_result_interface', methods=['GET', 'POST'])
 def show_result_interface():
     form = DeviceConfigInterfaces()
-    #print('static route id',form.id.data)
+    # print('static route id',form.id.data)
     if form.validate_on_submit():
         device = Device.query.get(form.id.data)
         if ping(device.deviceip):
@@ -218,11 +208,99 @@ def show_result_interface():
                 # print(c.net_connect.find_prompt())
                 output = c.interfaces(form.interface.data, form.interface_ip.data,
                                       form.interface_mascara.data, 'Up')
-                #output= c.net_connect.find_prompt()
+                # output= c.net_connect.find_prompt()
             else:
                 output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
-            #new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
-            #new_device_config.device= device
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+
+            return jsonify(data=format(output))
+        else:
+            return jsonify(data='El estado del dispositivo es Down! verifique conectividad IP...')
+    else:
+        # flash_errors(form)
+        # return jsonify(ip_destino=form.ip_destino.errors, mascara=form.mascara.errors, next_hop=form.next_hop.errors)
+        return jsonify(error1=form.interface.errors, error2=form.interface_ip.errors, error3=form.interface_mascara.errors)
+
+    return jsonify(data='Error en la validacion de los datos!')
+
+
+@app.route('/show_result_interface_mpls', methods=['GET', 'POST'])
+def show_result_interface_mpls():
+    form = DeviceConfigInterfaces_mpls()
+    # print('static route id',form.id.data)
+    if form.validate_on_submit():
+        device = Device.query.get(form.id.data)
+        if ping(device.deviceip):
+            interface = form.interface.data
+            interface_ip = form.interface_ip.data
+            interface_mascara = form.interface_mascara.data
+
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+
+            c = SendCommands()
+            print(c.connecting(device.deviceuserlogin, device.deviceip,
+                               device.devicepassword, device.devicepasswordena))
+
+            # c.connecting('raul','192.168.10.110','cisco','cisco')
+            if not c.error_desc == 'Error de Autenticacion':
+                # print(c.net_connect.find_prompt())
+                output = c.interfaces_mpls_ip(form.interface.data, form.interface_ip.data,
+                                              form.interface_mascara.data, 'Up')
+                # output= c.net_connect.find_prompt()
+            else:
+                output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+
+            return jsonify(data=format(output))
+        else:
+            return jsonify(data='El estado del dispositivo es Down! verifique conectividad IP...')
+    else:
+        # flash_errors(form)
+        # return jsonify(ip_destino=form.ip_destino.errors, mascara=form.mascara.errors, next_hop=form.next_hop.errors)
+        return jsonify(error1=form.interface.errors, error2=form.interface_ip.errors, error3=form.interface_mascara.errors)
+
+    return jsonify(data='Error en la validacion de los datos!')
+
+
+@app.route('/show_result_interface_vrf', methods=['GET', 'POST'])
+def show_result_interface_vrf():
+    form = DeviceConfigInterfaces_vrf()
+    # print('static route id',form.id.data)
+    if form.validate_on_submit():
+        device = Device.query.get(form.id.data)
+        if ping(device.deviceip):
+            interface = form.interface.data
+            interface_ip = form.interface_ip.data
+            interface_mascara = form.interface_mascara.data
+
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+
+            c = SendCommands()
+            print(c.connecting(device.deviceuserlogin, device.deviceip,
+                               device.devicepassword, device.devicepasswordena))
+
+            # c.connecting('raul','192.168.10.110','cisco','cisco')
+            if not c.error_desc == 'Error de Autenticacion':
+                # print(c.net_connect.find_prompt())
+                output = c.interfaces_vrf(form.interface.data, form.interface_vrf.data, form.interface_ip.data,
+                                          form.interface_mascara.data, 'Up')
+                # output= c.net_connect.find_prompt()
+            else:
+                output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
             # db.session.add(new_device_config)
             # db.session.commit()
 
@@ -240,7 +318,7 @@ def show_result_interface():
 @app.route('/show_result_bgp', methods=['GET', 'POST'])
 def show_result_bgp():
     form = DevicesConfigBGP()
-    #print('static route id',form.id.data)
+    # print('static route id',form.id.data)
     if form.validate_on_submit():
         device = Device.query.get(form.id.data)
         if ping(device.deviceip):
@@ -268,11 +346,11 @@ def show_result_bgp():
                 # print(c.net_connect.find_prompt())
                 output = c.bgp(form.bgp_process.data, form. bgp_neighbor.data,
                                form.bgp_as.data, form.bgp_network.data)
-                #output= c.net_connect.find_prompt()
+                # output= c.net_connect.find_prompt()
             else:
                 output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
-            #new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
-            #new_device_config.device= device
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
             # db.session.add(new_device_config)
             # db.session.commit()
             return jsonify(data=format(output))
@@ -290,8 +368,8 @@ def show_result_bgp():
 
 @app.route('/show_result_ibgp_mpls', methods=['GET', 'POST'])
 def show_result_ibgp_mpls():
-    form = ibgp_mpls()
-    #print('static route id',form.id.data)
+    form = ibgp_mpls_form()
+    # print('static route id',form.id.data)
     if form.validate_on_submit():
         device = Device.query.get(form.id.data)
         if ping(device.deviceip):
@@ -317,13 +395,114 @@ def show_result_ibgp_mpls():
             # c.connecting('raul','192.168.10.110','cisco','cisco')
             if not c.error_desc == 'Error de Autenticacion':
                 # print(c.net_connect.find_prompt())
-                output = c.iBGP_mpls(form.bgp_process.data, form. bgp_neighbor.data,
-                                     form.bgp_as.data, form.bgp_network.data)
-                #output= c.net_connect.find_prompt()
+                output = c.iBGP_mpls(form.bgp_process.data, form.bgp_as.data,
+                                     form. bgp_neighbor.data)
+                # output= c.net_connect.find_prompt()
             else:
                 output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
-            #new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
-            #new_device_config.device= device
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+            return jsonify(data=format(output))
+
+            return jsonify(data=format(out))
+        else:
+            return jsonify(data='El estado del dispositivo es Down! verifique conectividad IP...')
+    else:
+        # flash_errors(form)
+        # return jsonify(ip_destino=form.ip_destino.errors, mascara=form.mascara.errors, next_hop=form.next_hop.errors)
+        return jsonify(error1=form.bgp_process.errors, error2=form.bgp_as.errors, error3=form.bgp_neighbor.errors, erro4=form.bgp_network, error5=form.bgp_mascara)
+
+    return jsonify(data='Error en la validacion de los datos!')
+
+
+@app.route('/show_result_ibgp_ec', methods=['GET', 'POST'])
+def show_result_ibgp_ec():
+    form = ibgp_ec_form()
+    # print('static route id',form.id.data)
+    if form.validate_on_submit():
+        device = Device.query.get(form.id.data)
+        if ping(device.deviceip):
+            # falta terminar de configurar
+            # mycall = call()
+            # out = mycall.calling(ip,mask,n_hop)
+            # print(out)
+
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+
+            c = SendCommands()
+            print(c.connecting(device.deviceuserlogin, device.deviceip,
+                               device.devicepassword, device.devicepasswordena))
+            userlogin = device.deviceuserlogin
+            deviceip = device.deviceip
+            devicepassword = device.devicepassword
+            devicepasswordena = device.devicepasswordena
+
+            print(userlogin, deviceip, devicepassword, devicepasswordena)
+            # c.connecting('raul','192.168.10.110','cisco','cisco')
+            if not c.error_desc == 'Error de Autenticacion':
+                # print(c.net_connect.find_prompt())
+                output = c.iBGP_extended_community(form.bgp_process.data, form. bgp_neighbor.data)
+                # output= c.net_connect.find_prompt()
+            else:
+                output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+            return jsonify(data=format(output))
+
+            return jsonify(data=format(out))
+        else:
+            return jsonify(data='El estado del dispositivo es Down! verifique conectividad IP...')
+    else:
+        # flash_errors(form)
+        # return jsonify(ip_destino=form.ip_destino.errors, mascara=form.mascara.errors, next_hop=form.next_hop.errors)
+        return jsonify(error1=form.bgp_process.errors, error2=form.bgp_as.errors, error3=form.bgp_neighbor.errors, erro4=form.bgp_network, error5=form.bgp_mascara)
+
+    return jsonify(data='Error en la validacion de los datos!')
+
+
+@app.route('/show_result_ebgp_vrf', methods=['GET', 'POST'])
+def show_result_ebgp_vrf():
+    form = ebgp_vrf_form()
+    # print('static route id',form.id.data)
+    if form.validate_on_submit():
+        device = Device.query.get(form.id.data)
+        if ping(device.deviceip):
+            # falta terminar de configurar
+            # mycall = call()
+            # out = mycall.calling(ip,mask,n_hop)
+            # print(out)
+
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
+            # db.session.add(new_device_config)
+            # db.session.commit()
+
+            c = SendCommands()
+            print(c.connecting(device.deviceuserlogin, device.deviceip,
+                               device.devicepassword, device.devicepasswordena))
+            userlogin = device.deviceuserlogin
+            deviceip = device.deviceip
+            devicepassword = device.devicepassword
+            devicepasswordena = device.devicepasswordena
+
+            print(userlogin, deviceip, devicepassword, devicepasswordena)
+            # c.connecting('raul','192.168.10.110','cisco','cisco')
+            if not c.error_desc == 'Error de Autenticacion':
+                # print(c.net_connect.find_prompt())
+                output = c.eBGP_vrf(form.bgp_process.data, form.bgp_as.data,
+                                    form. bgp_neighbor.data, form.bgp_vrf.data)
+                # output= c.net_connect.find_prompt()
+            else:
+                output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
             # db.session.add(new_device_config)
             # db.session.commit()
             return jsonify(data=format(output))
@@ -342,7 +521,7 @@ def show_result_ibgp_mpls():
 @app.route('/show_result_eigrp', methods=['GET', 'POST'])
 def show_result_eigrp():
     form = DevicesConfigEIGRP()
-    #print('static route id',form.id.data)
+    # print('static route id',form.id.data)
     if form.validate_on_submit():
         device = Device.query.get(form.id.data)
         if ping(device.deviceip):
@@ -370,11 +549,11 @@ def show_result_eigrp():
                 # print(c.net_connect.find_prompt())
                 output = c.eigrp(form.eigrp_process.data,
                                  form.eigrp_network.data, form.eigrp_mascara.data)
-                #output= c.net_connect.find_prompt()
+                # output= c.net_connect.find_prompt()
             else:
                 output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
-            #new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
-            #new_device_config.device= device
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
             # db.session.add(new_device_config)
             # db.session.commit()
             return jsonify(data=format(output))
@@ -393,7 +572,7 @@ def show_result_eigrp():
 @app.route('/show_result_ospf', methods=['GET', 'POST'])
 def show_result_ospf():
     form = DevicesConfigOSPF()
-    #print('static route id',form.id.data)
+    # print('static route id',form.id.data)
     if form.validate_on_submit():
         device = Device.query.get(form.id.data)
         if ping(device.deviceip):
@@ -407,11 +586,11 @@ def show_result_ospf():
             if not c.error_desc == 'Error de Autenticacion':
                 # print(c.net_connect.find_prompt())
                 output = c.ospf(form.ospf_process.data, form.ospf_network.data, form.ospf_area.data)
-                #output= c.net_connect.find_prompt()
+                # output= c.net_connect.find_prompt()
             else:
                 output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
-            #new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
-            #new_device_config.device= device
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
             # db.session.add(new_device_config)
             # db.session.commit()
             return jsonify(data=format(output))
@@ -430,7 +609,7 @@ def show_result_ospf():
 @app.route('/show_result_vrf', methods=['GET', 'POST'])
 def show_result_vrf():
     form = Vrf()
-    #print('static route id',form.id.data)
+    # print('static route id',form.id.data)
     if form.validate_on_submit():
         device = Device.query.get(form.id.data)
         if ping(device.deviceip):
@@ -443,11 +622,11 @@ def show_result_vrf():
             if not c.error_desc == 'Error de Autenticacion':
                 # print(c.net_connect.find_prompt())
                 output = c.vrf(form.vrf_name.data, form.vrf_rd.data, form.vrf_rt.data)
-                #output= c.net_connect.find_prompt()
+                # output= c.net_connect.find_prompt()
             else:
                 output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
-            #new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
-            #new_device_config.device= device
+            # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)
+            # new_device_config.device= device
             # db.session.add(new_device_config)
             # db.session.commit()
             return jsonify(data=format(output))
@@ -482,6 +661,18 @@ def bgp(device):
 def ibgp_mpls(device):
     form = ibgp_mpls_form()
     return render_template('ibgp_mpls.html', form=form, device=device)
+
+
+@app.route('/ibgp_ec/<device>', methods=['GET', 'POST'])
+def ibgp_ec(device):
+    form = ibgp_ec_form()
+    return render_template('ibgp_extended_community.html', form=form, device=device)
+
+
+@app.route('/ebgp_vrf/<device>', methods=['GET', 'POST'])
+def ebgp_vrf(device):
+    form = ebgp_vrf_form()
+    return render_template('ebgp_vrf.html', form=form, device=device)
 
 
 @app.route('/monitor/<device>', methods=['GET', 'POST'])
@@ -574,13 +765,13 @@ config_columns = ['ID', 'Device Configuration', 'Saved On', 'Device Id']
 
 @app.route('/_server_data')
 def _server_data():
-    #print('es admin:',g.user.admin, ' y su nombre es:', g.user.username)
+    # print('es admin:',g.user.admin, ' y su nombre es:', g.user.username)
     if g.user.admin == 1:
         all = Device.query.all()
     else:
         all = Device.query.filter_by(user_id=g.user.id).all()
 
-    #all = Device.query.all()
+    # all = Device.query.all()
     collection = []
     for i in range(len(all)):
         if all[i].devicerol == 'CPE':
@@ -618,7 +809,7 @@ def _server_data_config():
 @app.route('/load_device', methods=['GET', 'POST'])
 def load_device():
     up = ''
-    #print('request json',request.json)
+    # print('request json',request.json)
     device = Device.query.get(request.json)
     if ping(device.deviceip):
         up = 'Up'
@@ -631,7 +822,7 @@ def load_device():
     for inter in i:
         lista_inter += inter + ' '
 
-    #print('device data:',device.devicename,device.deviceip,device.devicerol)
+    # print('device data:',device.devicename,device.deviceip,device.devicerol)
     return jsonify(devicename=device.devicename, devicerol=device.devicerol, deviceip=device.deviceip, status=up, devicesnmp=device.devicesnmp, interfaces_snmp=lista_inter)
 
 

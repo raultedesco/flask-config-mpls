@@ -106,15 +106,92 @@ class SendCommands(ConnectDevice):
         config_commands_interface.append(command_state)
 
         print(self.net_connect.find_prompt())
-        executed_interface = self.net_connect.send_config_set
-        (config_commands_interface)
+        executed_interface = self.net_connect.send_config_set(config_commands_interface)
         print(executed_interface)
         print(self.net_connect.find_prompt())
         comando_verificacion_interfaces =\
             'show running-config partition interface ' + interface_value
         print(comando_verificacion_interfaces)
         check = self.net_connect.send_command(comando_verificacion_interfaces)
-        # separated='\n-----Verificacion de configuracion impactada-----\n'
+        executed_interface += self.separated
+        executed_interface += check
+
+        return executed_interface
+
+    def interfaces_vrf(self, interface_value=None, interface_vrf_value=None, ipaddress_value=None, mascara_value=None, state_value=None):
+        space = ' '
+        interface_ip_vrf_forwarding = 'ip vrf forwarding'
+        interface = 'interface'
+        interface_value = interface_value
+        ipaddress = 'ip address'
+        ipaddress_value = ipaddress_value
+        mascara_value = mascara_value
+        if not state_value == None:
+            self.state_value = state_value
+        else:
+            self.state_value = 'Down'
+        self.net_connect.enable()
+        command_interface = interface + space + interface_value
+        command_set_vrf_forwarding_interface = interface_ip_vrf_forwarding + space + interface_vrf_value
+        command_set_interface = ipaddress + space + ipaddress_value + space + mascara_value
+        if self.state_value == 'Up':
+            command_state = 'no shutdown'
+        else:
+            command_state = 'shutdown'
+
+        config_commands_interface = [command_interface]
+        config_commands_interface.append(command_set_vrf_forwarding_interface)
+        config_commands_interface.append(command_set_interface)
+        config_commands_interface.append(command_state)
+
+        print(self.net_connect.find_prompt())
+        executed_interface = self.net_connect.send_config_set(config_commands_interface)
+        print(executed_interface)
+        print(self.net_connect.find_prompt())
+        comando_verificacion_interfaces =\
+            'show running-config partition interface ' + interface_value
+        print(comando_verificacion_interfaces)
+        check = self.net_connect.send_command(comando_verificacion_interfaces)
+
+        executed_interface += self.separated
+        executed_interface += check
+
+        return executed_interface
+
+    def interfaces_mpls_ip(self, interface_value=None, ipaddress_value=None, mascara_value=None, state_value=None):
+        space = ' '
+        interfaces_mpls_ip = 'mpls ip'
+        interface = 'interface'
+        interface_value = interface_value
+        ipaddress = 'ip address'
+        ipaddress_value = ipaddress_value
+        mascara_value = mascara_value
+        if not state_value == None:
+            self.state_value = state_value
+        else:
+            self.state_value = 'Down'
+        self.net_connect.enable()
+        command_interface = interface + space + interface_value
+        command_set_interface = ipaddress + space + ipaddress_value + space + mascara_value
+        command_set_mpls_ip = interfaces_mpls_ip
+        if self.state_value == 'Up':
+            command_state = 'no shutdown'
+        else:
+            command_state = 'shutdown'
+
+        config_commands_interface = [command_interface]
+        config_commands_interface.append(command_set_interface)
+        config_commands_interface.append(command_set_mpls_ip)
+        config_commands_interface.append(command_state)
+
+        print(self.net_connect.find_prompt())
+        executed_interface = self.net_connect.send_config_set(config_commands_interface)
+        print(executed_interface)
+        print(self.net_connect.find_prompt())
+        comando_verificacion_interfaces =\
+            'show running-config partition interface ' + interface_value
+        print(comando_verificacion_interfaces)
+        check = self.net_connect.send_command(comando_verificacion_interfaces)
 
         executed_interface += self.separated
         executed_interface += check
@@ -202,7 +279,7 @@ class SendCommands(ConnectDevice):
 
         return executed_ospf
 
-    def iBPG_mpls(self, bgp_process_value=None, remote_as_internal=None, bgp_neighbor_internal_value=None):
+    def iBGP_mpls(self, bgp_process_value=None, remote_as_internal=None, bgp_neighbor_internal_value=None):
         space = ' '
         bgp = 'router bgp'
         bgp_network = 'network'
@@ -210,20 +287,22 @@ class SendCommands(ConnectDevice):
         bgp_remote_as = 'remote-as'
         bgp_neighbor_activate = 'activate'
 
+        # Establecer Modo Ena
+        self.net_connect.enable()
+
         cmd_bgp = bgp + space + bgp_process_value
         cmd_neighbor = bgp_neighbor + space + bgp_neighbor_internal_value\
-            + bgp_remote_as + space + bgp_process_value
+            + space + bgp_remote_as + space + remote_as_internal
 
         config_commands_ibgp_mpls = [cmd_bgp]
         config_commands_ibgp_mpls.append(cmd_neighbor)
 
         print(self.net_connect.find_prompt())
-        executed_ =\
+        executed_ibgp_mpls =\
             self.net_connect.send_config_set(config_commands_ibgp_mpls)
 
         print(self.net_connect.find_prompt())
-        cmd_verificacion_ibgp_mpls = 'show running-config vrf '\
-            + vrf_name
+        cmd_verificacion_ibgp_mpls = 'show running-config partition router bgp ' + bgp_process_value
 
         check_ibgp_mpls = \
             self.net_connect.send_command(cmd_verificacion_ibgp_mpls)
@@ -231,9 +310,9 @@ class SendCommands(ConnectDevice):
         executed_ibgp_mpls += self.separated
         executed_ibgp_mpls += check_ibgp_mpls
 
-        return executed_bgp_vpn_mpls
+        return executed_ibgp_mpls
 
-    def iBGP_extended_community(self):
+    def iBGP_extended_community(self, bgp_process_value=None, bgp_neighbor_internal_value=None):
         space = ' '
         bgp = 'router bgp'
         bgp_network = 'network'
@@ -244,20 +323,24 @@ class SendCommands(ConnectDevice):
         bgp_vpnv4_family = ' address-family vpnv4'
         bgp_vpnv4_community = 'send-community extended'
 
+        # Establecer Modo Ena
+        self.net_connect.enable()
+
+        # Armar Comando
         cmd_bgp = bgp + space + bgp_process_value
-        cmd_extended_communty = bgp_vpnv4_community
+        cmd_bgp_vpnv4_family = bgp_vpnv4_family
         cmd_neighbor_activate = bgp_neighbor + space + \
             bgp_neighbor_internal_value + space + bgp_neighbor_activate
         cmd_send_community = bgp_neighbor + space + bgp_neighbor_internal_value\
             + space + bgp_vpnv4_community
 
         print(cmd_bgp)
-        print(cmd_extended_communty)
+        print(cmd_bgp_vpnv4_family)
         print(cmd_neighbor_activate)
         print(cmd_send_community)
 
         config_commands_ibgp_ec = [cmd_bgp]
-        config_commands_ibgp_ec.append(cmd_extended_communty)
+        config_commands_ibgp_ec.append(cmd_bgp_vpnv4_family)
         config_commands_ibgp_ec.append(cmd_neighbor_activate)
         config_commands_ibgp_ec.append(cmd_send_community)
 
@@ -266,8 +349,7 @@ class SendCommands(ConnectDevice):
             self.net_connect.send_config_set(config_commands_ibgp_ec)
 
         print(self.net_connect.find_prompt())
-        cmd_verificacion_ibgp_ec = 'show running-config vrf '\
-            + vrf_name
+        cmd_verificacion_ibgp_ec = 'show running-config partition router bgp ' + bgp_process_value
 
         check_ibgp_ec = \
             self.net_connect.send_command(cmd_verificacion_ibgp_ec)
@@ -284,37 +366,44 @@ class SendCommands(ConnectDevice):
         bgp_remote_as = 'remote-as'
         bgp_neighbor_activate = 'activate'
         bgp_address_family = 'address-family ipv4 vrf'
+        bgp_address_family_rc = 'redistribute connected'
 
+        # Establecer Modo Ena
+        self.net_connect.enable()
+
+        # Armar Comando
         cmd_bgp = bgp + space + bgp_process_value
-        cmd_vpn_family = bgp_address_family + space + vrf_value
-        cmd_neighbor = bgp_neighbor + space + bgp_neighbor_external_value\
-            + space + bgp_remote_as + space + ebgp_remote_as
+        cmd_address_family = bgp_address_family + space + vrf_value
+        cmd_neighbor_vrf = bgp_neighbor + space +\
+            bgp_neighbor_external_value + space + bgp_remote_as + space + ebgp_remote_as
         cmd_neighbor_activate = bgp_neighbor + \
-            bgp_neighbor_external_value + space + bgp_neighbor_activate
+            space + bgp_neighbor_external_value + space + bgp_neighbor_activate
+        cmd_address_family_rc = bgp_address_family_rc
 
         print(cmd_bgp)
-        print(cmd_vpn_family)
-        print(cmd_neighbor)
+        print(cmd_address_family)
+        print(cmd_neighbor_vrf)
+        print(cmd_address_family_rc)
 
         config_commands_ebgp_vrf = [cmd_bgp]
-        config_commands_ebgp_vrf.append(cmd_vpn_family)
-        config_commands_ebgp_vrf.append(cmd_neighbor)
+        config_commands_ebgp_vrf.append(cmd_address_family)
+        config_commands_ebgp_vrf.append(cmd_neighbor_vrf)
+        config_commands_ebgp_vrf.append(cmd_neighbor_activate)
+        config_commands_ebgp_vrf.append(cmd_address_family_rc)
 
         print(self.net_connect.find_prompt())
         executed_ebgp_vrf =\
             self.net_connect.send_config_set(config_commands_ebgp_vrf)
 
         print(self.net_connect.find_prompt())
-        cmd_verificacion_ebgp_vrf = 'show running-config vrf '\
-            + vrf_name
-
+        cmd_verificacion_ebgp_vrf = 'show running-config partition router bgp ' + bgp_process_value
         check_ebgp_vrf = \
             self.net_connect.send_command(cmd_verificacion_ebgp_vrf)
         print(check_ebgp_vrf)
         executed_ebgp_vrf += self.separated
         executed_ebgp_vrf += check_ebgp_vrf
 
-        return executed_bgp_vpn_mpls
+        return executed_ebgp_vrf
 
     def vrf(self, vrf_name=None, vrf_rd_value=None, vrf_rt_value=None):
         space = ' '

@@ -17,7 +17,7 @@ Devices Configuration
 </script>
 
 {% block content %}
- <h3>BGP Protocol</h3>
+ <h3>Config Interfaces</h3>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -47,14 +47,13 @@ Devices Configuration
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-
     <li><a href="{{url_for('dashboard')}}""><i class="glyphicon glyphicon-globe"></i> Dashboard</a></li>
     <li><a href="javascript:history.go(-1)"><i class="glyphicon glyphicon-arrow-left"></i> Volver</a></li>
     <li role="separator" class="divider"></li>
     <li><a href="#"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
   </ul>
 
-  <!-- <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label> -->
+  <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label>
 
 </div>
 <div class="container-fluid">
@@ -69,6 +68,7 @@ Devices Configuration
       <li class="list-group-item" id="deviceip">Direccion IP:</li>
       <li class="list-group-item" id="devicerol">Rol:</li>
       <li class="list-group-item" id="devicesnmp">SNMP Comunity:</li>
+      <li class="list-group-item" id="devicesnmp_interfaces">Interfaces:</li>
       <li class="list-group-item" id="devicestatus">Status:</li>
 
   </ul>
@@ -90,20 +90,20 @@ Devices Configuration
         {{ wtf.form_field(form.id,readonly=True, value=device) }}
 
     </div>
+  <div class="form-group">
+        {{ wtf.form_field(form.interface) }}
+  </div>
+  <div class="form-group">
 
-    <div class="form-group">
-
-        {{ wtf.form_field(form.bgp_process) }}
-    </div>
-    <div class="form-group">
-        {{ wtf.form_field(form.bgp_neighbor) }}
-    </div>
-
+        {{ wtf.form_field(form.interface_ip) }}
+  </div>
+  <div class="form-group">
+        {{ wtf.form_field(form.interface_mascara) }}
+  </div>
 
 
 
   <button type="submit" class="btn btn-primary">Configurar</button>
-
 </form>
 
 </div>
@@ -111,30 +111,12 @@ Devices Configuration
 
 </div>
 <div class="col-xs-6 col-md-4">
+  <div class="form-group ">
 
-
-<div class="panel panel-default" id="panelchange">
-  <!-- Default panel contents -->
-<div class="panel-heading">Resultado de la Configuracion</div>
-  <!-- List group -->
-<div class="panel-body">
-
-
-
-    <textarea class="form-control" id="message-text" style="height: 290px ; border: none"></textarea>
-
-
-
+    <textarea class="form-control" id="message-text" style="height: 319px"></textarea>
 
 
   </div>
-
-
-</div>
-
-
-
-
 
       <div id='response' style="display: none"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>Ejecutando Comandos...<span></div>
 
@@ -156,7 +138,7 @@ Devices Configuration
   <script>
     $(document).ready(function() {
         $('form').submit(function (e) {
-            var url = "{{ url_for('show_result_ibgp_ec') }}"; // send the form data here.
+            var url = "{{ url_for('show_result_interface_mpls' ) }}"; // send the form data here.
             $.ajax({
 
                 type: "POST",
@@ -210,30 +192,21 @@ Devices Configuration
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8'
             }).done(function(data) {
-                 console.log(data['deviceip']);
-                 var valores = data['devicename'] + data['deviceip']+data['devicerol']
-/*                 $('.list-group').append('<li class="list-group-item">'+'Nombre del Dispositivo:'+data['devicename'] + '</li>')
-                 $('.list-group').append('<li class="list-group-item">'+'Direccion IP:'+data['deviceip'] + '</li>')
-                 $('.list-group').append('<li class="list-group-item">'+'Rol:'+data['devicerol'] + '</li>')
-                 $('.list-group').append('<li class="list-group-item">'+'Status:'+data['status'] + '</li>')*/
+                 console.log(data['interfaces_snmp']);
 
                  $('#devicename').html('Nombre del Dispositivo:'+data['devicename'])
                  $('#deviceip').html('Direccion IP:'+data['deviceip'])
                  $('#devicerol').html('Rol:'+data['devicerol'])
-                 if(data['devicesnmp']==null){
-                 $('#devicesnmp').html('SNMP Comunity:'+'No Configurada')
-                 }
-                 else{
                  $('#devicesnmp').html('SNMP Comunity:'+data['devicesnmp'])
-                 }
+                 $('#devicesnmp_interfaces').html('Interfaces:'+data['interfaces_snmp'])
                  $('#devicestatus').html('Status:'+data['status'])
                  $('#response').fadeOut();
 
             });
-            //$('input[name="id"]').val({{device}})
+
   };
     function check_with_ajax(){
-   //var id = "{{ device }}";
+
    var url = "{{ url_for('check_device') }}";
             $.ajax({
                 type: 'POST',
@@ -246,12 +219,14 @@ Devices Configuration
                  if (data['status']=='Down') {
                  $("#panelchange").removeClass('panel-success');
                  $("#panelchange").addClass('panel-danger');
+                 $('#devicesnmp_interfaces').html('Interfaces:'+data['interfaces_snmp'])
                  $('#devicestatus').html('Status:'+data['status'])
                  $('#response').fadeOut();
                  }
                  else{
                    $("#panelchange").removeClass('panel-danger');
                    $("#panelchange").addClass('panel-success');
+                   $('#devicesnmp_interfaces').html('Interfaces:'+data['interfaces_snmp'])
                    $('#devicestatus').text('Status:'+data['status'])
                    $('#response').fadeOut();
                  }
