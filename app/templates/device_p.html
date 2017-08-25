@@ -52,7 +52,7 @@ Devices Configuration
     <li><a href="{{url_for('command',command='interfaces',device=device)}}"><i class="glyphicon glyphicon-object-align-vertical"></i> Interfaces</a></li>
     <li><a href="{{url_for('command',command='interfaces_mpls',device=device)}}"><i class="glyphicon glyphicon-object-align-vertical"></i> Interfaces MPLS IP</a></li>
     <li role="separator" class="divider"></li>
-    <li><a href="#"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
+    <li><a href="{{url_for('command',command='save_config',device=device)}}"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
   </ul>
 
   <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label>

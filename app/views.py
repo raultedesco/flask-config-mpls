@@ -832,13 +832,14 @@ def check_device():
     print('id:', id)
     task = bg_task.delay(id)
 
-    while True:
-        if task.state == 'SUCCESS':
-            result = task.get()
-            print(result[0])
-            print(result[1])
-            return jsonify(status=result[0], interfaces_snmp=result[1])
+    #while True:
+    if task.state == 'SUCCESS':
+       result = task.get()
+       print(result[0])
+       print(result[1])
+       return jsonify(status=result[0], interfaces_snmp=result[1])
 
+    return jsonify(status="pending", interfaces_snmp="no results yet")
 
 @app.route('/load_ip_brief_and_routes', methods=['GET', 'POST'])
 def load_ip_brief_and_routes():
@@ -863,6 +864,14 @@ def load_ip_brief_and_routes():
 
     else:
         return jsonify(data='El estado del dispositivo es Down! verifique conectividad IP...')
+
+
+@app.route('/save_config', methods=['GET', 'POST'])
+def save_config():
+    id = request.json
+    print('id:', id)
+    task = bg_save_config.delay(id)
+    return jsonify(data='Proccess to save config trigger!')
 
 
 def flash_errors(form):

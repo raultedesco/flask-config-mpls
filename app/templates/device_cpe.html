@@ -52,7 +52,7 @@ Devices Configuration
     <li><a href="{{url_for('command',command='eigrp',device=device)}}"><i class="glyphicon glyphicon-stats"></i> Protocol EIGRP</a></li>
     <li><a href="{{url_for('command',command='interfaces',device=device)}}"><i class="glyphicon glyphicon-object-align-vertical"></i> Interfaces</a></li>
     <li role="separator" class="divider"></li>
-    <li><a href="#"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
+    <li><a href="" id="saveconfig" <i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
   </ul>
 
   <!-- <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label> -->
@@ -197,6 +197,7 @@ Devices Configuration
             e.preventDefault(); // block the traditional submission of the form.
         });
         // Inject our CSRF token into our AJAX request.
+        saveconfig();
 
     });
 </script>
@@ -262,12 +263,12 @@ Devices Configuration
 
             });
   };
-$(function(){
-    setTimeout(loadajax,5000);
-});
-$(function(){
-    setInterval(check_with_ajax,5000);
-});
+// $(function(){
+//     setTimeout(loadajax,5000);
+// });
+// $(function(){
+//     setInterval(check_with_ajax,5000);
+// });
 
 </script>
 
@@ -308,6 +309,45 @@ if (typeof data.error1 === "undefined" || typeof data.error2 === "undefined"  ||
   else{bootbox.alert('Erros Msg:'+buffer);}
 
 };
+</script>
+
+
+<script>
+    
+function saveconfig(){
+var url = "{{ url_for('save_config') }}";
+    
+        $('#saveconfig').click(function(){
+
+           
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify({{device}}),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function(data) {
+                 console.log(data.data);
+                 bootbox.alert(data.data);
+                 
+             
+
+
+            });
+           
+
+             
+                 return false;    
+
+                        
+
+        });
+
+
+     
+    };
+
 </script>
 
 {% endblock %}

@@ -1,0 +1,6 @@
+Mejoras
+
+enviar js a archivos externos al template html
+http://stewartjpark.com/Flask-JSGlue/ 
+
+

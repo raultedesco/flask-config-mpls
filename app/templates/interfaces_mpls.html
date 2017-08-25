@@ -50,7 +50,7 @@ Devices Configuration
     <li><a href="{{url_for('dashboard')}}""><i class="glyphicon glyphicon-globe"></i> Dashboard</a></li>
     <li><a href="javascript:history.go(-1)"><i class="glyphicon glyphicon-arrow-left"></i> Volver</a></li>
     <li role="separator" class="divider"></li>
-    <li><a href="#"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
+    <li><a href="{{url_for('command',command='save_config',device=device)}}"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
   </ul>
 
   <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label>

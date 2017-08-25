@@ -51,7 +51,7 @@ Devices Configuration
     <li><a href="{{url_for('bgp',device=device)}}">Protocol BGP</a></li>
     <li><a href="#">Protocol EIGRP</a></li>
     <li role="separator" class="divider"></li>
-    <li><a href="#">Save Config</a></li>
+    <li><a href="{{url_for('command',command='save_config',device=device)}}"><i class="glyphicon glyphicon-floppy-saved"></i> Save Config</a></li>
   </ul>
 
   <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label>

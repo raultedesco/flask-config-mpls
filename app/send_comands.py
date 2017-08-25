@@ -5,6 +5,17 @@ from connect_device import ConnectDevice
 class SendCommands(ConnectDevice):
     separated = '\n-----Verificacion de configuracion impactada-----\n'
 
+    def save_config(self):
+        get_running_config = 'show running-config'
+        # Establecer Modo Ena
+        self.net_connect.enable()
+
+
+        print(self.net_connect.find_prompt())
+        executed_running_config = self.net_connect.send_command(get_running_config)
+
+        return executed_running_config
+
     def static_route(self, ip_destino, mascara, next_hop):
         # c = Commands()
         # static_route = c.getXmlCommand('static-route')
