@@ -139,6 +139,10 @@ class ModalFormViewConfig(FlaskForm):
     # dconfig = StringField('Device Config')
     dconfig = TextAreaField(u'Device Config')
 
+class ModalFormViewConfigLog(FlaskForm):
+    id = StringField('Id')
+    dconfig_log = TextAreaField(u'Device Config Log')
+
 
 class ModalFormEdit(FlaskForm):
     id = StringField('Id from wtf')

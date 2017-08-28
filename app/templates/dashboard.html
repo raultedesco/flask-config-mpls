@@ -34,9 +34,8 @@ Dashboard
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/admin">Ajustes</a></li>
-            <li><a href="{{ url_for('logout') }}">Cerrar Sesion</a></li>
-
+            <li><a href="/admin"><i class="glyphicon glyphicon-cog"></i> Ajustes</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="glyphicon glyphicon-log-out"></i> Cerrar Sesion</a></li>
           </ul>
         </div>
       </div>
@@ -49,9 +48,9 @@ Dashboard
             <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><a id="devicemonitor" href=""><img src=static\images\monitor.png> Device-Monitor</a></li>
-            <li><a id="configlog" href=""><img src=static\images\log.png> Config-Log</a></li>
-            <li><a id="configbackup" href="{{ url_for('configs_backup') }}"><img src=static\images\backup.png> Config-Backup</a></li>
+            <li><a id="devicemonitor" href=""><img src=static\images\monitor48.png> Device-Monitor</a></li>
+            <li><a id="configlog" href="{{ url_for('configs_log') }}"><img src=static\images\scheduler48.png> Config-Log</a></li>
+            <li><a id="configbackup" href="{{ url_for('configs_backup') }}"><img src=static\images\backupcisco48.png> Config-Backup</a></li>
           </ul>
 
         </div>
@@ -166,7 +165,7 @@ Dashboard
 
 
 
-<form id="addForm" method="post" action='/add' class="form-horizontal" style="display: none;">
+<form id="addForm" method="post" action='/' class="form-horizontal" style="display: none;">
 
     <div class="form-group">
             <label class="col-xs-3 control-label">Device Name</label>
@@ -321,10 +320,19 @@ Dashboard
                     show: true // We will show it manually later
                                   })
                                     .on('shown.bs.modal', function() {
+
                                         $('#addForm').show();// Show the login form
                                         $('input[name="id"]').val('');
-                                        $('input[name="username"]').val('');
-                                        $('input[name="mail"]').val('');
+                                        $('input[name="devicename"]').val('');
+                                        $('#devicerol_edit').val('');
+                                        $('input[name="deviceso"]').val('');
+                                        $ ('input[name="devicesshv2"]').val('');
+                                        $ ('input[name="deviceip"]').val('');
+                                        $('input[name="deviceuserlogin"]').val('');
+                                        $('input[name="deviceuserpassword"]').val('');
+                                        $('input[name="deviceenapassword"]').val('');
+                                        
+
                                       })
                                        .on('hide.bs.modal', function(e) {
                     // Bootbox will remove the modal (including the body which contains the login form)
@@ -423,7 +431,7 @@ Dashboard
                     show: false // We will show it manually later
                                   })
                                     box.on('shown.bs.modal', function() {
-                                        $('#userForm')                                          
+                                        $('#userForm')                                       
                                                                     .show();// Show the login form
                                         $('input[name="id"]').val(data['0']);
                                         $('input[name="devicename"]').val(data['2']);
@@ -432,8 +440,25 @@ Dashboard
                                         $ ('input[name="devicesshv2"]').val(data['5']);
                                         $ ('input[name="deviceip"]').val(data['6']);
                                         $('input[name="deviceuserlogin"]').val(data['7']);
-                                        $('input[name="deviceuserpassword"]').val(data['8']);
-                                        $('input[name="deviceenapassword"]').val(data['9']);
+
+
+                                        var url = "{{ url_for('get_device_data') }}";
+                                        var id = data['0']; // send the form data here.
+
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: url,
+                                            data: JSON.stringify(id),
+                                            dataType: 'json',
+                                            contentType: 'application/json; charset=utf-8'
+                                        }).done(function(data) {
+                                            $('input[name="deviceuserpassword"]').val(data['password']);
+                                            $('input[name="deviceenapassword"]').val(data['password_ena']);
+                                            $('input[name="devicesnmp"]').val(data['snmp']);
+                                            
+                                        });
+
+
                                         
 
                                         console.log(data)
@@ -570,6 +595,41 @@ Dashboard
 
 
 </script>
+
+
+<script>
+        $(document).ready(function() {
+        $('#addForm').submit(function (e) {
+            var url = "{{ url_for('add') }}"; // send the form data here.
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('#addForm').serialize(), // serializes the form's elements.
+                success: function (data) {
+                    console.log(data);  // display the returned data in the console.
+                    //$('#userForm').modal('hide');
+                    $('#addForm').parents('.bootbox').modal('hide');
+                    bootbox.alert(data.data);
+
+
+                }
+            });
+            e.preventDefault(); // block the traditional submission of the form.
+        });
+        // Inject our CSRF token into our AJAX request.
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ form.csrf_token._value() }}")
+                }
+            }
+        })
+    }); 
+
+
+
+</script>
+
 
 <script>
     

@@ -50,7 +50,7 @@ Dashboard
           </ul>
           <ul class="nav nav-sidebar">
             <li><a id="devicemonitor" href="{{url_for('dashboard')}}"><img src=static\images\dashboard48.png> Dashboard </a></li>
-            <li><a id="configlog" href="{{url_for('configs_log')}}"><img src=static\images\scheduler48.png> Config-Log</a></li>
+            <li><a id="configbackup" href="{{ url_for('configs_backup') }}"><img src=static\images\backupcisco48.png> Config-Backup</a></li>
           </ul>
 
         </div>
@@ -99,7 +99,7 @@ Dashboard
             <label class="col-xs-3 control-label">Device Config</label>
     <div class="col-xs-5">
 
-            {{ wtf.form_field(form.dconfig,form_type='inline',style='margin: 0px -138.844px 0px 0px; width: 387px; height: 283px;') }}
+            {{ wtf.form_field(form.dconfig_log,form_type='inline',style='margin: 0px -138.844px 0px 0px; width: 387px; height: 283px;') }}
 
 
     </div>
@@ -213,7 +213,7 @@ Dashboard
                                         console.log('This was logged in the callback: ' + result);
                                         console.log(id_);
                                         jsons=JSON.stringify(id_);
-                                        console.log(jsons);
+                                        console.log('jsons var:'+jsons);
                                         if(result==true){
 
                                                $.ajax({
@@ -265,7 +265,7 @@ Dashboard
                                         $('#userForm')                                          
                                                                     .show();// Show the login form
                                         $('input[name="id"]').val(data['0']);
-                                        $('textarea[name="dconfig"]').val(data['1']);
+                                        $('textarea[name="dconfig_log"]').val(data['1']);
 
                             
                                         console.log(data)
@@ -302,7 +302,7 @@ Dashboard
         //"sDom": "<'row-fluid'<'span6 toolbar'><'span6'>r>t<'row-fluid'<'span6'f><'span6'p>>",
         "bProcessing": true,
         "bjQueryUI": true,
-        "sAjaxSource": "{{ url_for('_server_data_config') }}",
+        "sAjaxSource": "{{ url_for('_server_data_config_log') }}",
         
        });
 

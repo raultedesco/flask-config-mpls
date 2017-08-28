@@ -19,6 +19,7 @@ celery = make_celery(app)
 # celery.conf.update(app.config)
 
 from views import *
+from views_results import *
 from models import *
 
 

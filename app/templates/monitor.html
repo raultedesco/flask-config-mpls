@@ -132,10 +132,12 @@ Devices Configuration
   function loadajax(){
    //var id = "{{ device }}";
    var url = "{{ url_for('load_device') }}";
+   var id_value = "{{device}}";
+   console.log('id before ajax request:'+id_value);
             $.ajax({
                 type: 'POST',
                 url: url,
-                data: JSON.stringify({{device}}),
+                data: JSON.stringify(id_value),
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8'
             }).done(function(data) {

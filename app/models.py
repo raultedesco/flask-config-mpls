@@ -1,6 +1,6 @@
 from app import db
 from flask_login import UserMixin
-from datetime import datetime
+import datetime
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -57,10 +57,10 @@ class DeviceConfig(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	deviceconfig = db.Column('deviceconfig',db.String(300))
 	devicecurrentconfig = db.Column('devicecurrentconfig',db.String(300))
-	seved_on = db.Column('save_on' ,db.DateTime)
+	saved_on = db.Column('save_on' ,db.DateTime)
 	device_id = db.Column(db.Integer, db.ForeignKey('devices.id'))
 
 	def __init__(self,deviceconfig,devicecurrentconfig):
 		self.deviceconfig=deviceconfig
 		self.devicecurrentconfig=devicecurrentconfig
-		self.seved_on=datetime.utcnow()
+		self.saved_on=datetime.datetime.now()
