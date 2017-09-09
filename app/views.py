@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, login_required, logout_user, current_user
 from forms import *
 from models import *
+from api_restful import *
 from datatables import BaseDataTables
 # from .conectRouter import call
 from send_comands import *
@@ -15,13 +16,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import InputRequired, Email, Length, IPAddress, DataRequired
 from flask_admin.contrib.sqla import ModelView
+
+
 from tasks_list import *
 
 
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
 
 @app.route('/')
 @login_required
@@ -80,11 +82,19 @@ def configs_backup():
     form = ModalFormViewConfig()
     return render_template('configs_backup.html', name=current_user.username, columnas=config_columns, form=form)
 
+@app.route('/reporting', methods=['GET', 'POST'])
+@login_required
+def reporting():
+    form = ModalFormViewConfigLog()
+    return render_template('reporting.html', name=current_user.username, columnas=list_user_columns, form=form)
+
 @app.route('/configs_log', methods=['GET', 'POST'])
 @login_required
 def configs_log():
     form = ModalFormViewConfigLog()
     return render_template('configs_log.html', name=current_user.username, columnas=config_log_columns, form=form)
+
+
 
 @app.route('/device_p/<device>')
 def devices_p(device):
@@ -269,7 +279,7 @@ def config():
 columns = ['ID', 'Image', 'Device Name', 'ROL', 'SO', 'SSHv2', 'IP', 'Device User login']
 config_columns = ['ID', 'Device Configuration', 'Saved On', 'Device Id']
 config_log_columns = ['ID', 'Config Send', 'Device']
-
+list_user_columns = ['ID','Usuario', 'Email','Registered_on','Is Admin']
 
 @app.route('/_server_data')
 def _server_data():
@@ -331,6 +341,26 @@ def _server_data_config_log():
     return json.dumps(results)
 
 
+@app.route('/_server_data_list_users')
+def _server_data_list_users():
+
+    # consulta todos los registros de la base deviceconfig
+    all = User.query.all()
+
+    collection = []
+    for i in range(len(all)):
+        collection.append(dict(
+            zip(list_user_columns, [all[i].id, all[i].username, all[i].email,all[i].registered_on, all[i].admin])))
+
+    results = BaseDataTables(request, list_user_columns, collection).output_result()
+
+    # return the results as a string for the datatable
+    return json.dumps(results)
+
+
+
+
+
 @app.route('/load_device', methods=['GET', 'POST'])
 def load_device():
     up = ''
@@ -357,12 +387,12 @@ def check_device():
     print('id:', id)
     task = bg_task.delay(id)
 
-    #while True:
-    if task.state == 'SUCCESS':
-       result = task.get()
-       print(result[0])
-       print(result[1])
-       return jsonify(status=result[0], interfaces_snmp=result[1])
+    while True:
+        if task.state == 'SUCCESS':
+            result = task.get()
+            print(result[0])
+            print(result[1])
+            return jsonify(status=result[0], interfaces_snmp=result[1])
 
     return jsonify(status="pending", interfaces_snmp="no results yet")
 
@@ -432,3 +462,6 @@ def redirect_url():
 
 
 admin.add_view(ModelView(User, db.session))
+
+
+

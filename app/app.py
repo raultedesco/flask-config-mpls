@@ -5,6 +5,7 @@ from flask_login import LoginManager
 from flask_admin import Admin
 from tasks_celery import make_celery
 
+
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 Bootstrap(app)
@@ -20,8 +21,9 @@ celery = make_celery(app)
 
 from views import *
 from views_results import *
+from api_restful import *
 from models import *
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=12345, use_reloader=True, threaded=True)
+    app.run(host='0.0.0.0', debug=True, port=12346, use_reloader=True, threaded=True)

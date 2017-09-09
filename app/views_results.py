@@ -11,6 +11,7 @@ from tasks_list import *
 
 @app.route('/show_result_static_route', methods=['GET', 'POST'])
 def show_result_static_route():
+    group = 'Static Route'
     form = DevicesConfigStaticRoute()
     # print('static route id',form.id.data)
     if form.validate_on_submit():
@@ -42,7 +43,7 @@ def show_result_static_route():
                 # print(c.net_connect.find_prompt())
                 output , running_config = c.static_route(form.ip_destino.data, form.mascara.data, form.next_hop.data)
                 # output= c.net_connect.find_prompt()
-                task = bg_save_executed_cm.delay(form.id.data,output,running_config)
+                task = bg_save_executed_cm.delay(form.id.data,output,running_config,group)
             else:
                 output = 'Verifique que los Passwords de Acceso tanto para login como modo ENABLE sean correctos'
             # new_device_config = DeviceConfig(deviceconfig=device.devicename+'-'+str(datetime.utcnow()),devicecurrentconfig=out)

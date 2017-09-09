@@ -58,7 +58,7 @@ def bg_save_config(id):
 
 
 @celery.task(name='calery_bg_save_executed_cmd')
-def bg_save_executed_cm(id,cmds,running_config):
+def bg_save_executed_cm(id,cmds,running_config,group):
     # task Asyncrono para que no interrumpa las solicitudes http get o post
     message=''
     device = Device.query.get(id)
@@ -66,7 +66,8 @@ def bg_save_executed_cm(id,cmds,running_config):
     print('ip:',device.deviceip)
     print('user password:',device.devicepassword)
     print('user password ena:',device.devicepasswordena)
-    new_device_config = DeviceConfig(deviceconfig=cmds,devicecurrentconfig=running_config)
+    print('group',group)
+    new_device_config = DeviceConfig(deviceconfig=cmds,devicecurrentconfig=running_config,deviceconfig_group=group)
     new_device_config.device= device
     db.session.add(new_device_config)
     db.session.commit()

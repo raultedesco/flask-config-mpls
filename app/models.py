@@ -15,7 +15,9 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.username)
-
+    @property
+    def serialize(self):
+    	return {'id': self.id,'user_name': self.username,'email': self.email, 'is_admin': self.admin, 'registered_on': self.registered_on }
 
 class Device(db.Model):
 	__tablename__ = 'devices'
@@ -48,6 +50,9 @@ class Device(db.Model):
 	def __repr__(self):
 		desc = self.devicename + '-'+ self.devicerol
 		return '<Device %r>' % (desc)
+	@property
+	def serialize(self):
+		return {'id': self.id,'name': self.devicename,'device rol':self.devicerol }
 
 
 
@@ -56,11 +61,13 @@ class DeviceConfig(db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True)
 	deviceconfig = db.Column('deviceconfig',db.String(300))
+	deviceconfig_group = db.Column('deviceconfig_group',db.String(200))
 	devicecurrentconfig = db.Column('devicecurrentconfig',db.String(300))
 	saved_on = db.Column('save_on' ,db.DateTime)
 	device_id = db.Column(db.Integer, db.ForeignKey('devices.id'))
 
-	def __init__(self,deviceconfig,devicecurrentconfig):
+	def __init__(self,deviceconfig,devicecurrentconfig,deviceconfig_group):
 		self.deviceconfig=deviceconfig
 		self.devicecurrentconfig=devicecurrentconfig
 		self.saved_on=datetime.datetime.now()
+		self.deviceconfig_group=deviceconfig_group

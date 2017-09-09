@@ -1,0 +1,416 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}
+Reporting
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="{{url_for('.static', filename='css/dashboard.css')}}">
+<link rel="stylesheet" href= "{{url_for('.static', filename='css/font-awesome.min.css')}}">
+<link rel="stylesheet" href="{{url_for('.static', filename='css/style.css')}}">
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+<link rel="stylesheet" href="{{url_for('.static', filename='css/jquery.jqplot.min.css')}}">
+
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">  
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+           <a href="#" class="navbar-left"><img src="/static/images/mpls_logo_latest.png" style="padding-top: 5px;
+    border-top-width: 5px"></a>
+          <a class="navbar-brand" href="#"></a>
+           
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/admin"><i class="glyphicon glyphicon-cog"></i> Ajustes</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="glyphicon glyphicon-log-out"></i> Cerrar Sesion</a></li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a id="devicemonitor" href="{{url_for('dashboard')}}"><img src=static\images\dashboard48.png> Dashboard </a></li>
+            <li><a id="configbackup" href="{{ url_for('configs_backup') }}"><img src=static\images\backupcisco48.png> Config-Backup</a></li>
+          </ul>
+
+        </div>
+      </div>  
+      </div>
+      <div class="container-fluid">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+
+          <h1 class="page-header" style="padding-top: 9px">Bienvenido, {{ name }}!</h1>
+
+
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle"  type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom: 10px">
+    Reportes
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+    <li><a href=""><i class="glyphicon glyphicon-stats"></i> List de Usuarios</a></li>
+    <li><a href=""><i class="glyphicon glyphicon-stats"></i> List de Dispositivos</a></li>
+    <li><a href=""><i class="glyphicon glyphicon-stats"></i> List Dispositivos x Usuario</a></li>
+    <li><a href=""><i class="glyphicon glyphicon-stats"></i> List de Dispositivos x Rol</a></li>
+    <li><a href=""><i class="glyphicon glyphicon-stats"></i> List de Config x Grupo</a></li>
+    <li><a href=""><i class="glyphicon glyphicon-stats"></i> List de Config x Grupo x Rol</a></li>
+
+
+  </ul>
+
+  <!-- <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label> -->
+
+</div>
+
+<div class="form-group" id="device_user" style="display:none;">
+<label for="specify">Especifique Usuario</label>
+<input class="form-control" type="text" name="specify" placeholder="Especifique Usuario"/>
+<p></p>
+<input class="btn btn-default" type="submit" value="Obtener Reporte">
+</div>
+
+
+<div class="form-group" id="device_rol" style="display:none;">
+<label for="specify">Especifique ROL</label>
+<input class="form-control" type="text" name="specify" placeholder="Especifique ROL"/>
+</div>
+
+
+<div class="form-group" id="config_grupo" style="display:none;">
+<label for="specify">Especifique Grupo</label>
+<input class="form-control" type="text" name="specify" placeholder="Especifique Grupo"/>
+</div>
+
+<div class="form-group" id="config_grupo_rol" style="display:none;">
+<label for="specify">Especifique Grupo y ROL</label>
+<input class="form-control" type="text" name="specify" placeholder="Especifique Grupo y ROL"/>
+</div>
+
+<div class="table-responsive">
+ <table id="config_table" class="table table-condensed" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    {% for col in columnas %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+</table>
+
+</div>
+
+    <div><span>You Clicked: </span><span id="info1">Nothing yet</span></div>
+        
+    <div id="chart1" style="margin-top:20px; margin-left:20px; width:300px; height:300px;"></div>
+ </div>  
+
+ </div>
+<!-- The form which is used to populate the item data -->
+
+
+
+
+
+
+
+<form id="userForm" method="post" action='/' class="form-horizontal" style="display: none;">
+    <div class="form-group">
+        <label class="col-xs-3 control-label">ID</label>
+        <div class="col-xs-3">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_field(form.id,form_type='inline',readonly=True) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+            <label class="col-xs-3 control-label">Device Config</label>
+    <div class="col-xs-5">
+
+            {{ wtf.form_field(form.dconfig_log,form_type='inline',style='margin: 0px -138.844px 0px 0px; width: 387px; height: 283px;') }}
+
+
+    </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <div class="col-xs-5 col-xs-offset-3">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</form>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{url_for('.static', filename='js/jqplot/excanvas.min.js')}}"></script> 
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+ <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.bootstrap.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
+    <script src="{{url_for('.static', filename='js/jqplot/jquery.jqplot.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/jqplot/jqplot.barRenderer.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/jqplot/jqplot.categoryAxisRenderer.js')}}"></script>
+
+<script>
+
+    function sh_list() {
+
+
+    var events = $('#events');
+    var table = $('#config_table').DataTable( {
+        destroy: true,
+        dom: 'Brtip',
+        select: {
+            style: 'single'
+        },
+        lengthChange: false,
+        //"language": {
+        //    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+        //},
+         "language": {
+            
+    "sProcessing":     "Procesando...",
+    "sLengthMenu":     "Mostrar _MENU_ Dispositivos",
+    "sZeroRecords":    "No se encontraron Dispositivos",
+    "sEmptyTable":     "Ningun dato disponible en esta tabla",
+    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ Dispositivos",
+    "sInfoEmpty":      "Mostrando Dispositivos del 0 al 0 de un total de 0 Dispositivos",
+    "sInfoFiltered":   "(filtrado de un total de _MAX_ Dispositivos)",
+    "sInfoPostFix":    "",
+    "sSearch":         "Buscar en Configuraciones:",
+    "sUrl":            "",
+    "sInfoThousands":  ",",
+    "sLoadingRecords": "Cargando...",
+    "oPaginate": {
+        "sFirst":    "Primero",
+        "sLast":     "Ultimo",
+        "sNext":     "Siguiente",
+        "sPrevious": "Anterior"
+    },
+    "oAria": {
+        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    }
+
+        },
+        buttons: [  'csv', 'excel', 'pdf'                
+                                      
+
+                ],
+
+
+        //"sDom": "<'row-fluid'<'span6 toolbar'><'span6'>r>t<'row-fluid'<'span6'f><'span6'p>>",
+        "bProcessing": true,
+        "bjQueryUI": true,
+        "sAjaxSource": "{{ url_for('_server_data_list_users') }}",
+        
+       });
+
+
+
+    
+   
+
+
+
+}; 
+
+
+</script>
+
+
+
+<script>
+
+$(document).ready(function(){
+        $.jqplot.config.enablePlugins = true;
+        var s1 = [2, 6, 7, 10];
+        var ticks = ['a', 'b', 'c', 'd'];
+         
+        plot1 = $.jqplot('chart1', [s1], {
+            // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+            animate: !$.jqplot.use_excanvas,
+            seriesDefaults:{
+                renderer:$.jqplot.BarRenderer,
+                pointLabels: { show: true }
+            },
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    ticks: ticks
+                }
+            },
+            highlighter: { show: false }
+        });
+     
+        $('#chart1').bind('jqplotDataClick', 
+            function (ev, seriesIndex, pointIndex, data) {
+                $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+            }
+        );
+    });
+
+
+
+
+</script>
+
+
+<script>
+
+$(document).ready(function(){
+$('.dropdown-toggle').dropdown();
+
+$(".dropdown-menu li a").click(function(){
+  var selText = $(this).text();
+  $(this).parents('.dropdown').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+
+  $('.dropdown.open .dropdown-toggle').dropdown('toggle');
+
+     switch(selText)
+   { 
+
+        case ' List de Usuarios':
+            sh_list();
+            break;  
+
+       case ' List Dispositivos x Usuario':
+           $('#device_user').show();
+           $('#device_rol').hide();
+           $('#config_grupo').hide();
+           $('#config_grupo_rol').hide();
+           break;
+       case ' List de Dispositivos x Rol':
+           $('#device_user').hide();
+           $('#device_rol').show();
+           $('#config_grupo').hide();
+           $('#config_grupo_rol').hide();
+           break;
+       case ' List de Config x Grupo':
+           $('#device_user').hide();
+           $('#device_rol').hide();
+           $('#config_grupo').show();
+           $('#config_grupo_rol').hide();
+           break;
+       case ' List de Config x Grupo x Rol':
+           $('#device_user').hide();
+           $('#device_rol').hide();
+           $('#config_grupo').hide();
+           $('#config_grupo_rol').show();
+           break;
+       default:
+           $('#device_user').hide();
+           $('#device_rol').hide();
+           $('#config_grupo').hide();
+           $('#config_grupo_rol').hide();
+
+           break;
+   }
+
+
+
+
+    // if(selText==' List Dispositivos x Usuario'){
+    //         $('#otherType').show();
+    
+
+    //     }
+    //     if(selText==' List de Dispositivos x Rol'){
+    //         $('#otherType').show();
+    
+
+    //     }
+
+    //     if(selText==' List de Config x Grupo'){
+    //         $('#otherType').show();
+    
+
+    //     }
+
+    //     if(selText==' List de Config x Grupo x Rol'){
+    //         $('#otherType').show();
+    
+
+    //     }
+
+
+
+
+  $(".dropdown").on("show.bs.dropdown", function(event){
+                 console.log('fire show event');
+
+
+    });
+    $(".dropdown").on("shown.bs.dropdown", function(event){
+              console.log('fire shown event');
+
+    });
+      $(".dropdown").on("hide.bs.dropdown", function(event){
+                 console.log('fire hide event');
+
+
+    });
+        $(".dropdown").on("hidden.bs.dropdown", function(event){
+            console.log('fire hidden event');
+    });
+
+  return false;
+});
+return false;
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+

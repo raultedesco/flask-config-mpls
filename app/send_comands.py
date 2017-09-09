@@ -47,7 +47,7 @@ class SendCommands(ConnectDevice):
         # executed_current_config = self.net_connect.send_config_set(content)
         running_config  = self.save_config()
 
-        return executed_static_route, running_config
+        return executed_static_route, running_config 
 
     def bgp(self, bgp_process=None, neighbor_ip=None, remote_as=None, network_ip=None):
         # c = Commands()
