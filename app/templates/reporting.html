@@ -75,7 +75,7 @@ Reporting
     <li><a href=""><i class="glyphicon glyphicon-stats"></i> List Dispositivos x Usuario</a></li>
     <li><a href=""><i class="glyphicon glyphicon-stats"></i> List de Dispositivos x Rol</a></li>
     <li><a href=""><i class="glyphicon glyphicon-stats"></i> List de Config x Grupo</a></li>
-    <li><a href=""><i class="glyphicon glyphicon-stats"></i> List de Config x Grupo x Rol</a></li>
+  
 
 
   </ul>
@@ -83,36 +83,53 @@ Reporting
   <!-- <label class="control-label" for="ip_destino" style="margin-left: 810px">Resultado de la Configuracion</label> -->
 
 </div>
-
+<form id="devices_users_rep">
 <div class="form-group" id="device_user" style="display:none;">
 <label for="specify">Especifique Usuario</label>
-<input class="form-control" type="text" name="specify" placeholder="Especifique Usuario"/>
+<input class="form-control" type="text" name="user" placeholder="Especifique Usuario"/>
 <p></p>
 <input class="btn btn-default" type="submit" value="Obtener Reporte">
 </div>
+</form>
 
-
+<form id="devices_rol_rep">
 <div class="form-group" id="device_rol" style="display:none;">
 <label for="specify">Especifique ROL</label>
-<input class="form-control" type="text" name="specify" placeholder="Especifique ROL"/>
+<select class="form-control" id="devicerol" name="devicerol"><option value="P">P</option><option value="PE">PE</option><option value="CPE">CPE</option></select>
+<p></p>
+<input class="btn btn-default" type="submit" value="Obtener Reporte">
 </div>
+</form>
 
-
-<div class="form-group" id="config_grupo" style="display:none;">
+<form id="devices_config_rep">
+<div class="form-group" id="device_group" style="display:none;">
 <label for="specify">Especifique Grupo</label>
-<input class="form-control" type="text" name="specify" placeholder="Especifique Grupo"/>
+<select class="form-control" id="device_group" name="device_group">
+<option value="POSPF">Protocol OSPF</option>
+<option value="PEIGRP">Protocol EIGRP</option>
+<option value="PBGP">Protocol BGP</option>
+<option value="INTERFACE">Interfaces</option>
+<option value="INTERFACEMPLSIP">Interfaces MPLS IP</option>
+<option value="INTERFACEVRF">Interfaces VRF</option>
+<option value="EBGPVRF">eBGP VRF</option>
+<option value="IBGPMPLS">iBGP MPLS</option>
+<option value="IBGPEXTENDEDCOMUNITY">iBGP extended community</option>
+<option value="STATICROUTE">Static Route</option>
+</select>
+<p></p>
+<input class="btn btn-default" type="submit" value="Obtener Reporte">
 </div>
+</form>
 
-<div class="form-group" id="config_grupo_rol" style="display:none;">
-<label for="specify">Especifique Grupo y ROL</label>
-<input class="form-control" type="text" name="specify" placeholder="Especifique Grupo y ROL"/>
-</div>
+<!-- columnas_user=list_user_columns, columnas_devices=list_devices_columns, columnas_devices_user=list_devices_users_columns, columnas_devices_rol=list_devices_rol_columns, columnas_config_group=list_config_group_columns -->
 
-<div class="table-responsive">
- <table id="config_table" class="table table-condensed" cellspacing="0" width="100%">
+
+
+<div id="t1" class="table-responsive">
+ <table id="config_table" class="table table-condensed" cellspacing="0" width="100%" style="display: none;">
             <thead>
                 <tr>
-                    {% for col in columnas %}
+                    {% for col in columnas_user %}
                     <th>{{ col }}</th>
                     {% endfor %}
                 </tr>
@@ -124,51 +141,85 @@ Reporting
 
 </div>
 
-    <div><span>You Clicked: </span><span id="info1">Nothing yet</span></div>
+<div id="t2" class="table-responsive">
+ <table id="config_table_devices" class="table table-condensed" cellspacing="0" width="100%" style="display: none;">
+            <thead>
+                <tr>
+                    {% for col in columnas_devices %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+</table>
+
+</div>
+
+<div id="t3" class="table-responsive">
+ <table id="config_table_devices_user" class="table table-condensed" cellspacing="0" width="100%" style="display: none;">
+            <thead>
+                <tr>
+                    {% for col in columnas_devices_user %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+</table>
+
+</div>
+
+<div id="t4" class="table-responsive">
+ <table id="config_table_devices_rol" class="table table-condensed" cellspacing="0" width="100%" style="display: none;">
+            <thead>
+                <tr>
+                    {% for col in columnas_devices_rol %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+</table>
+
+</div>
+
+
+<div id="t5" class="table-responsive">
+ <table id="config_table_config_group" class="table table-condensed" cellspacing="0" width="100%" style="display: none;">
+            <thead>
+                <tr>
+                    {% for col in columnas_config_group %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+</table>
+
+</div>
+
+    <div><span style="display: none;">You Clicked: </span><span id="info1" style="display: none;">Nothing yet</span></div>
+    <div><span id="label2"></span><span id="info2"></span></div>
+
+    <div id="graficos">
         
-    <div id="chart1" style="margin-top:20px; margin-left:20px; width:300px; height:300px;"></div>
+    </div>
+       
+    <div id="chart1" style="margin-top:20px; margin-left:20px; width:300px; height:300px;"style="display: none;"></div>
+
+
  </div>  
 
  </div>
 <!-- The form which is used to populate the item data -->
-
-
-
-
-
-
-
-<form id="userForm" method="post" action='/' class="form-horizontal" style="display: none;">
-    <div class="form-group">
-        <label class="col-xs-3 control-label">ID</label>
-        <div class="col-xs-3">
-            {{ form.hidden_tag() }}
-            {{ wtf.form_field(form.id,form_type='inline',readonly=True) }}
-        </div>
-    </div>
-
-    <div class="form-group">
-            <label class="col-xs-3 control-label">Device Config</label>
-    <div class="col-xs-5">
-
-            {{ wtf.form_field(form.dconfig_log,form_type='inline',style='margin: 0px -138.844px 0px 0px; width: 387px; height: 283px;') }}
-
-
-    </div>
-    </div>
-
-
-
-
-    <div class="form-group">
-        <div class="col-xs-5 col-xs-offset-3">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        </div>
-    </div>
-</form>
-
-
-
 
 {% endblock %}
 
@@ -196,14 +247,15 @@ Reporting
     <script src="{{url_for('.static', filename='js/jqplot/jquery.jqplot.min.js')}}"></script>
     <script src="{{url_for('.static', filename='js/jqplot/jqplot.barRenderer.min.js')}}"></script>
     <script src="{{url_for('.static', filename='js/jqplot/jqplot.categoryAxisRenderer.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/jqplot/jqplot.pieRenderer.min.js')}}"></script>
 
 <script>
 
-    function sh_list() {
-
-
+    function sh_list(table,url_ajax) {
+    var url = url_ajax;
+    var selector ='#'+table;
     var events = $('#events');
-    var table = $('#config_table').DataTable( {
+    var table = $(selector).DataTable( {
         destroy: true,
         dom: 'Brtip',
         select: {
@@ -248,14 +300,10 @@ Reporting
         //"sDom": "<'row-fluid'<'span6 toolbar'><'span6'>r>t<'row-fluid'<'span6'f><'span6'p>>",
         "bProcessing": true,
         "bjQueryUI": true,
-        "sAjaxSource": "{{ url_for('_server_data_list_users') }}",
+        "sAjaxSource": url,
         
        });
 
-
-
-    
-   
 
 
 
@@ -269,42 +317,7 @@ Reporting
 <script>
 
 $(document).ready(function(){
-        $.jqplot.config.enablePlugins = true;
-        var s1 = [2, 6, 7, 10];
-        var ticks = ['a', 'b', 'c', 'd'];
-         
-        plot1 = $.jqplot('chart1', [s1], {
-            // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
-            animate: !$.jqplot.use_excanvas,
-            seriesDefaults:{
-                renderer:$.jqplot.BarRenderer,
-                pointLabels: { show: true }
-            },
-            axes: {
-                xaxis: {
-                    renderer: $.jqplot.CategoryAxisRenderer,
-                    ticks: ticks
-                }
-            },
-            highlighter: { show: false }
-        });
-     
-        $('#chart1').bind('jqplotDataClick', 
-            function (ev, seriesIndex, pointIndex, data) {
-                $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
-            }
-        );
-    });
 
-
-
-
-</script>
-
-
-<script>
-
-$(document).ready(function(){
 $('.dropdown-toggle').dropdown();
 
 $(".dropdown-menu li a").click(function(){
@@ -316,68 +329,63 @@ $(".dropdown-menu li a").click(function(){
      switch(selText)
    { 
 
-        case ' List de Usuarios':
-            sh_list();
+       case ' List de Usuarios':
+            //plot1.destroy();
+            hide_tables();
+            $('#t1').show();
+            $('#config_table').show();
+            table='config_table'
+            url_ajax="{{ url_for('_server_data_list_users') }}"
+            sh_list(table,url_ajax);
+            get_users_count();
             break;  
+       case ' List de Dispositivos':
+            //plot1.destroy();
+            hide_tables();
+            $('#t2').show();
+            $('#config_table_devices').show();
+            table='config_table_devices'
+            url_ajax="{{ url_for('_server_data_list_devices') }}"
+            sh_list(table,url_ajax);
+            get_devices_count();
+            break; 
 
        case ' List Dispositivos x Usuario':
+           hide_tables();
+           destroy_plot();
+           get_devices_users();
+           hide_message();
            $('#device_user').show();
            $('#device_rol').hide();
            $('#config_grupo').hide();
            $('#config_grupo_rol').hide();
            break;
        case ' List de Dispositivos x Rol':
+            hide_tables();
+            get_devices_rol();
            $('#device_user').hide();
            $('#device_rol').show();
            $('#config_grupo').hide();
            $('#config_grupo_rol').hide();
            break;
        case ' List de Config x Grupo':
+            hide_tables();
+            destroy_plot();
+            get_config_group();
            $('#device_user').hide();
            $('#device_rol').hide();
-           $('#config_grupo').show();
+           $('#device_group').show();
            $('#config_grupo_rol').hide();
-           break;
-       case ' List de Config x Grupo x Rol':
-           $('#device_user').hide();
-           $('#device_rol').hide();
-           $('#config_grupo').hide();
-           $('#config_grupo_rol').show();
            break;
        default:
            $('#device_user').hide();
            $('#device_rol').hide();
-           $('#config_grupo').hide();
-           $('#config_grupo_rol').hide();
+           $('#device_group').hide();
+           hide_message();
 
            break;
    }
 
-
-
-
-    // if(selText==' List Dispositivos x Usuario'){
-    //         $('#otherType').show();
-    
-
-    //     }
-    //     if(selText==' List de Dispositivos x Rol'){
-    //         $('#otherType').show();
-    
-
-    //     }
-
-    //     if(selText==' List de Config x Grupo'){
-    //         $('#otherType').show();
-    
-
-    //     }
-
-    //     if(selText==' List de Config x Grupo x Rol'){
-    //         $('#otherType').show();
-    
-
-    //     }
 
 
 
@@ -402,9 +410,294 @@ $(".dropdown-menu li a").click(function(){
 
   return false;
 });
+
 return false;
 });
 </script>
+
+
+
+<script>
+
+var plot;
+var plot1;
+var plot2;
+function get_users_count(){
+
+   var url = "{{ url_for('api_users_count') }}";
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify('1'),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function(data) {
+                console.log('valor de cantidad reportando for ajax request:'+data['user_list']);
+                message='El grafico Muestra la cantidad de Usuarios en 2017, haciendo un total de:';
+                destroy_plot();
+                graficar(data['user_list'],message);
+
+                 
+                
+            });
+  };
+
+function get_devices_count(){
+
+   var url = "{{ url_for('api_devices_count') }}";
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify('1'),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function(data) {
+                console.log('valor de cantidad reportando for ajax request:'+data['devices_list']);
+                message='El grafico Muestra la cantidad de Devices en 2017, haciendo un total de:';
+                destroy_plot();
+                graficar(data['devices_list'],message);
+
+                 
+                
+            });
+  };
+
+
+
+function get_devices_users(){
+
+    $('#devices_users_rep').submit(function (e) {
+            $('#t3').show();
+           $('#config_table_devices_user').show();
+            user=$('input[name="user"]').val();
+            table='config_table_devices_user';
+            url_ajax="/_server_data_list_devices_user/"+user;            
+            sh_list(table,url_ajax);
+            e.preventDefault(); // block the traditional submission of the form.
+        });
+
+
+
+}
+
+function get_devices_rol(){
+
+    destroy_plot();
+
+    $('#devices_rol_rep').submit(function (e) {
+            $('#t4').show();
+            $('#config_table_devices_rol').show();
+            rol = $( "#devicerol option:selected" ).text();
+            table='config_table_devices_rol';
+            url_ajax="/_server_data_list_devices_rol/"+rol;            
+            sh_list(table,url_ajax);
+            
+            $.ajax({
+                type: 'POST',
+                url:  "/api/device/rol/counts" ,
+                data: JSON.stringify('1'),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function(data) {
+                P=data["devices_rol_count_P"]
+                PE=data["devices_rol_count_PE"]
+                CPE=data["devices_rol_count_CPE"]
+                console.log('Valores:'+P+', '+PE+', '+CPE);
+                message='El grafico Muestra el % de dispositivos por rol';
+                graficar_torta(P,PE,CPE,message);
+
+
+                 
+                
+            });
+            e.preventDefault(); // block the traditional submission of the form.
+        });
+
+
+
+}
+
+
+function get_config_group(){
+
+    destroy_plot();
+
+    $('#devices_config_rep').submit(function (e) {
+            $('#t5').show();
+            $('#config_table_config_group').show();
+            group = $( "#device_group option:selected" ).text();
+            table='config_table_config_group';
+            url_ajax="/_server_data_list_config_group/"+group; 
+            console.log("url_ajax armada para group:"+url_ajax);           
+            sh_list(table,url_ajax);
+            
+            $.ajax({
+                type: 'POST',
+                url:  "/api/config/group/counts" ,
+                data: JSON.stringify('1'),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function(data) {
+
+                POSPF=data["config_group_count_POSPF"];
+                PEIGRP=data["config_group_count_PEIGRP"];
+                PBGP=data["config_group_count_PBGP"];
+                INTERFACE=data["config_group_count_INTERFACE"];
+                INTERFACEMPLSIP=data["config_group_count_INTERFACEMPLSIP"];
+                INTERFACEVRF=data["config_group_count_INTERFACEVRF"];
+                EBGPVRF=data["config_group_count_EBGPVRF"];
+                IBGPMPLS=data["config_group_count_IBGPMPLS"];
+                IBGPEXTENDEDCOMUNITY=data["config_group_count_IBGPEXTENDEDCOMUNITY"]
+                STATICROUTE=data["config_group_count_STATICROUTE"]
+                console.log('Valores:'+STATICROUTE);
+                message='El grafico Muestra el % de config por group';
+                
+                graficar_torta_group(POSPF,PEIGRP,PBGP,INTERFACE,INTERFACEMPLSIP,INTERFACEVRF,EBGPVRF,IBGPMPLS,IBGPEXTENDEDCOMUNITY,STATICROUTE,message);
+
+
+
+                 
+                
+            });
+            e.preventDefault(); // block the traditional submission of the form.
+        });
+
+
+
+}
+
+function graficar(cant,message){
+
+ 
+        $.jqplot.config.enablePlugins = true;
+
+        var v=cant;
+        var s1 = [Number(v), 24, 45, 78];
+        var ticks = ['2017'];
+
+        show_message();
+
+        $('#label2').html(message);
+        $('#info2').html(cant);
+
+
+        plot = $.jqplot('chart1', [s1], {
+            // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+            
+            animate: !$.jqplot.use_excanvas,
+            seriesDefaults:{
+                renderer:$.jqplot.BarRenderer,
+                pointLabels: { show: true }
+            },
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    ticks: ticks
+                }
+            },
+            highlighter: { show: false }
+        });
+     
+
+    };
+
+function graficar_torta(P,PE,CPE,message){
+ show_message();
+ $('#label2').html(message);
+
+ plot1 = $.jqplot('chart1', [[['P',Number(P)],['PE',Number(PE)],['CPE',Number(CPE)]]], {
+        gridPadding: {top:0, bottom:38, left:0, right:0},
+        seriesDefaults:{
+            renderer:$.jqplot.PieRenderer, 
+            trendline:{ show:false }, 
+            rendererOptions: { padding: 8, showDataLabels: true }
+        },
+        legend:{
+            show:true, 
+            placement: 'outside', 
+            rendererOptions: {
+                numberRows: 1
+            }, 
+            location:'s',
+            marginTop: '15px'
+        }       
+    });
+ };
+
+ function graficar_torta_group(POSPF,PEIGRP,PBGP,INTERFACE,INTERFACEMPLSIP,INTERFACEVRF,EBGPVRF,IBGPMPLS,IBGPEXTENDEDCOMUNITY,STATICROUTE,message){
+ $('#label2').html(message);
+
+
+     plot2 = $.jqplot('chart1', [[['POSPF',Number(POSPF)],['PEIGRP',Number(PEIGRP)],
+        ['INTERFACE',Number(INTERFACE)],['INTERFACEMPLSIP',Number(INTERFACEMPLSIP)],
+        ['INTERFACEVRF',Number(INTERFACEVRF)],['EBGPVRF',Number(EBGPVRF)],['IBGPMPLS',Number(IBGPMPLS)],
+        ['IBGPEXTENDEDCOMUNITY',Number(IBGPEXTENDEDCOMUNITY)],
+        ['STATICROUTE',Number(STATICROUTE)]]], {
+        gridPadding: {top:0, bottom:38, left:0, right:0},
+        seriesDefaults:{
+            renderer:$.jqplot.PieRenderer, 
+            trendline:{ show:false }, 
+            rendererOptions: { padding: 8, showDataLabels: true }
+        },
+        legend:{
+            show:true, 
+            placement: 'outside', 
+            rendererOptions: {
+                numberRows: 1
+            }, 
+            location:'s',
+            marginTop: '15px'
+        }       
+    });
+ };
+
+
+function hide_tables(){
+
+    $('#config_table').hide();
+    $('#config_table_devices').hide();
+    $('#config_table_devices_user').hide();
+    $('#config_table_devices_rol').hide();
+    $('#config_table_config_group').hide();
+    $('#t1').hide();
+    $('#t2').hide();
+    $('#t3').hide();
+    $('#t4').hide();
+    $('#t5').hide();
+
+  }
+
+
+function hide_message(){
+
+           $('#label2').hide();
+           $('#info2').hide();
+
+}
+
+function show_message(){
+           $('#label2').show();
+           $('#info2').show();
+
+}
+function destroy_plot(){
+
+                if(plot){
+                    plot.destroy();
+                };
+                if(plot1){
+                    plot1.destroy();
+                };
+                if(plot2){
+                    plot2.destroy();
+                };
+                
+}
+
+
+</script>
+
+
 {% endblock %}
 
 

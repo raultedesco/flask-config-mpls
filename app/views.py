@@ -82,11 +82,19 @@ def configs_backup():
     form = ModalFormViewConfig()
     return render_template('configs_backup.html', name=current_user.username, columnas=config_columns, form=form)
 
+
+
+list_user_columns = ['ID','Usuario', 'Email','Registered_on','Is Admin']
+list_devices_columns  = ['ID', 'Device Name', 'ROL', 'SO', 'SSHv2', 'IP']
+list_devices_users_columns = ['ID', 'Device Name', 'ROL', 'SO', 'SSHv2', 'IP', 'Device User login']
+list_devices_rol_columns = ['ID', 'Image', 'Device Na me', 'ROL', 'SO', 'SSHv2', 'IP', 'Device User login']
+list_config_group_columns = ['ID', 'Config Send', 'Saved On', 'Device']
+
+
 @app.route('/reporting', methods=['GET', 'POST'])
 @login_required
 def reporting():
-    form = ModalFormViewConfigLog()
-    return render_template('reporting.html', name=current_user.username, columnas=list_user_columns, form=form)
+    return render_template('reporting.html', name=current_user.username, columnas_user=list_user_columns, columnas_devices=list_devices_columns, columnas_devices_user=list_devices_users_columns, columnas_devices_rol=list_devices_rol_columns, columnas_config_group=list_config_group_columns)
 
 @app.route('/configs_log', methods=['GET', 'POST'])
 @login_required
@@ -279,7 +287,7 @@ def config():
 columns = ['ID', 'Image', 'Device Name', 'ROL', 'SO', 'SSHv2', 'IP', 'Device User login']
 config_columns = ['ID', 'Device Configuration', 'Saved On', 'Device Id']
 config_log_columns = ['ID', 'Config Send', 'Device']
-list_user_columns = ['ID','Usuario', 'Email','Registered_on','Is Admin']
+
 
 @app.route('/_server_data')
 def _server_data():
@@ -357,7 +365,80 @@ def _server_data_list_users():
     # return the results as a string for the datatable
     return json.dumps(results)
 
+list_devices_columns  = ['ID', 'Device Name', 'ROL', 'SO', 'SSHv2', 'IP']
+@app.route('/_server_data_list_devices')
+def _server_data_list_devices():
 
+    # consulta todos los registros de la base deviceconfig
+    all = Device.query.all()
+
+    collection = []
+    for i in range(len(all)):
+        collection.append(dict(
+            zip(list_devices_columns, [all[i].id, all[i].devicename, all[i].devicerol,all[i].deviceso, all[i].devicesshv2, all[i].deviceip])))
+
+    results = BaseDataTables(request, list_devices_columns, collection).output_result()
+
+    # return the results as a string for the datatable
+    return json.dumps(results)
+
+
+list_devices_users_columns = ['ID', 'Device Name', 'ROL', 'SO', 'SSHv2', 'IP', 'Device User login']
+@app.route('/_server_data_list_devices_user/<user_id>')
+def _server_data_list_devices_user(user_id):
+
+    # consulta todos los registros de la base deviceconfig
+    all = Device.query.filter_by(user_id=user_id).all()
+    print("valor de user_id",user_id)
+    print("consulta", all[0].devicename)
+    collection = []
+    for i in range(len(all)):
+        collection.append(dict(
+            zip(list_devices_users_columns, [all[i].id, all[i].devicename, all[i].devicerol,all[i].deviceso, all[i].devicesshv2, all[i].deviceip, all[i].deviceuserlogin])))
+
+    results = BaseDataTables(request, list_devices_users_columns, collection).output_result()
+
+    # return the results as a string for the datatable
+    return json.dumps(results)
+
+
+list_devices_rol_columns = ['ID', 'Device Na me', 'ROL', 'SO', 'SSHv2', 'IP', 'Device User login']
+
+@app.route('/_server_data_list_devices_rol/<device_rol>')
+def _server_data_list_devices_rol(device_rol):
+
+    # consulta todos los registros de la base deviceconfig
+    all = Device.query.filter_by(devicerol=device_rol).all()
+    print("valor de user_id",device_rol)
+    print("consulta", all[0].devicename)
+    collection = []
+    for i in range(len(all)):
+        collection.append(dict(
+            zip(list_devices_users_columns, [all[i].id, all[i].devicename, all[i].devicerol,all[i].deviceso, all[i].devicesshv2, all[i].deviceip, all[i].deviceuserlogin])))
+
+    results = BaseDataTables(request, list_devices_users_columns, collection).output_result()
+
+    # return the results as a string for the datatable
+    return json.dumps(results)
+
+
+
+list_config_group_columns = ['ID', 'Config Send', 'Saved On', 'Device']
+
+@app.route('/_server_data_list_config_group/<config_group>')
+def _server_data_list_config_group(config_group):
+
+    # consulta todos los registros de la base deviceconfig
+    all = DeviceConfig.query.filter_by(deviceconfig_group=config_group).all()
+    collection = []
+    for i in range(len(all)):
+        collection.append(dict(
+            zip(list_config_group_columns, [all[i].id, all[i].deviceconfig, all[i].saved_on,all[i].device_id])))
+
+    results = BaseDataTables(request, list_config_group_columns, collection).output_result()
+
+    # return the results as a string for the datatable
+    return json.dumps(results)
 
 
 

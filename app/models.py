@@ -70,4 +70,4 @@ class DeviceConfig(db.Model):
 		self.deviceconfig=deviceconfig
 		self.devicecurrentconfig=devicecurrentconfig
 		self.saved_on=datetime.datetime.now()
-		self.deviceconfig_group=deviceconfig_group
+		self.deviceconfig_group=deviceconfig_group	
