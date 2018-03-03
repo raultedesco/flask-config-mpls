@@ -129,6 +129,7 @@ Devices Configuration
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <script>
+//load_device_parameters
   function loadajax(){
    //var id = "{{ device }}";
    var url = "{{ url_for('load_device') }}";
@@ -160,6 +161,7 @@ Devices Configuration
             });
             //$('input[name="id"]').val({{device}})
   };
+  //check_device_parameters
     function check_with_ajax(){
    //var id = "{{ device }}";
    var url = "{{ url_for('check_device') }}";
@@ -188,7 +190,7 @@ Devices Configuration
                 
             });
   };
-
+  //load_ip_brief_and_routes
     function load_ip_brief_and_routes(){
    //var id = "{{ device }}";
    var url = "{{ url_for('load_ip_brief_and_routes') }}";
