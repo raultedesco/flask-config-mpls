@@ -453,7 +453,7 @@ def load_device():
         up = 'Down'
 
     s = snmpcall()
-    i = s.interfaces()
+    i = s.interfaces(device.devicesnmp,device.deviceip)
     lista_inter = ''
     for inter in i:
         lista_inter += inter + ' '

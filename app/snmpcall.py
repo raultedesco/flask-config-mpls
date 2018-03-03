@@ -1,10 +1,10 @@
 from pysnmp.entity.rfc3413.oneliner import cmdgen
 class snmpcall():
-    def interfaces(self):
+    def interfaces(self,community=None,ip=None):
         cmdGen = cmdgen.CommandGenerator()
 
-        errorIndication, errorStatus, errorIndex, varBindTable = cmdGen.nextCmd(cmdgen.CommunityData('mpls_rw'),
-                                            cmdgen.UdpTransportTarget(('192.168.10.110', 161)),
+        errorIndication, errorStatus, errorIndex, varBindTable = cmdGen.nextCmd(cmdgen.CommunityData(community),
+                                            cmdgen.UdpTransportTarget((ip, 161)),
                                             '1.3.6.1.2.1.2.2.1.2', lookupNames=True, lookupValues=True
             )
 
@@ -29,7 +29,8 @@ class snmpcall():
                         if not val.prettyPrint()=='Null0':
                             self.interfaces.append('%s' % val.prettyPrint())
 
-        
+        print("Comunidad Consultada:",community)
+        print("IP Comunidad Consultada:",ip)
         return self.interfaces
 
 
