@@ -1,0 +1,21 @@
+
+
+!
+enable password cisco
+!
+ip domain name router.ssh.org
+!
+username raul privilege 15 password 0 cisco
+!
+!
+!
+ip ssh version 2
+!
+!         
+snmp-server community mpls_rw RW
+!
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
