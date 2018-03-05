@@ -55,12 +55,14 @@ def signup():
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data, method='sha256')
         new_user = User(username=form.username.data, email=form.email.data,
-                        password=hashed_password, registered_on=datetime.utcnow(), admin=False)
+                        password=hashed_password, registered_on=datetime.datetime.utcnow(), admin=False)
         db.session.add(new_user)
         db.session.commit()
 
-        return '<h1>New user has been created!</h1>'
-        # return '<h1>' + form.username.data + ' ' + form.email.data + ' ' + form.password.data + '</h1>'
+        #return '<h1>New user has been created!</h1>'
+        flash('Se ha completado el registro Correctamente.\n Use la opcion LOGIN para ingresar al Sistema', 'success')
+        #return redirect('login')
+        return redirect(url_for('signup'))
     else:
         flash_errors(form)
 
@@ -390,14 +392,24 @@ def _server_data_list_devices_user(user_id):
     # consulta todos los registros de la base deviceconfig
     all = Device.query.filter_by(user_id=user_id).all()
     print("valor de user_id",user_id)
-    print("consulta", all[0].devicename)
-    collection = []
-    for i in range(len(all)):
-        collection.append(dict(
-            zip(list_devices_users_columns, [all[i].id, all[i].devicename, all[i].devicerol,all[i].deviceso, all[i].devicesshv2, all[i].deviceip, all[i].deviceuserlogin])))
+    print(all)
+    if all!=[]:
+        print("consulta", all[0].devicename)
+        collection = []
+        for i in range(len(all)):
+            collection.append(dict(
+                zip(list_devices_users_columns, [all[i].id, all[i].devicename, all[i].devicerol,all[i].deviceso, all[i].devicesshv2, all[i].deviceip, all[i].deviceuserlogin])))
 
-    results = BaseDataTables(request, list_devices_users_columns, collection).output_result()
+        results = BaseDataTables(request, list_devices_users_columns, collection).output_result()
+    else:
 
+        collection = []
+        for i in range(len(all)):
+            collection.append(dict(
+                zip(list_devices_users_columns, ["None","None","None","None", "None", "None", "None"])))
+
+        results = BaseDataTables(request, list_devices_users_columns, collection).output_result()
+        
     # return the results as a string for the datatable
     return json.dumps(results)
 

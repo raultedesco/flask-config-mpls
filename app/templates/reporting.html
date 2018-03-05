@@ -85,7 +85,7 @@ Reporting
 </div>
 <form id="devices_users_rep">
 <div class="form-group" id="device_user" style="display:none;">
-<label for="specify">Especifique Usuario</label>
+<label for="specify">Especifique Usuario (id)</label>
 <input class="form-control" type="text" name="user" placeholder="Especifique Usuario"/>
 <p></p>
 <input class="btn btn-default" type="submit" value="Obtener Reporte">
@@ -433,7 +433,7 @@ function get_users_count(){
                 contentType: 'application/json; charset=utf-8'
             }).done(function(data) {
                 console.log('valor de cantidad reportando for ajax request:'+data['user_list']);
-                message='El grafico Muestra la cantidad de Usuarios en 2017, haciendo un total de:';
+                message='El grafico Muestra la cantidad de Usuarios en 2018, haciendo un total de:';
                 destroy_plot();
                 graficar(data['user_list'],message);
 
@@ -453,7 +453,7 @@ function get_devices_count(){
                 contentType: 'application/json; charset=utf-8'
             }).done(function(data) {
                 console.log('valor de cantidad reportando for ajax request:'+data['devices_list']);
-                message='El grafico Muestra la cantidad de Devices en 2017, haciendo un total de:';
+                message='El grafico Muestra la cantidad de Devices en 2018, haciendo un total de:';
                 destroy_plot();
                 graficar(data['devices_list'],message);
 
