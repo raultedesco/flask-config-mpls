@@ -3,31 +3,40 @@
 Steps to Install and Run the App
 ---------------------------------------------------------------------------------------------------------------------------------
 
-#install python3 
+#install python3
+
 $ sudo apt-get install python3
 
-#install pip3 
+#install pip3
+
 $ sudo apt-get instal python3-pip
 
 #install git
+
 $ sudo apt-get install git
 
 #install rabbitmq-server
+
 $ sudo apt-get install rabbitmq-server 
 
 #create a folder for our proyect
+
 $ mkdir mpls_networks
 
 #go to a folder mpls_networks
+
 $ cd mpls_networks
 
 #clone code from Github using git
+
 $ git clone https://github.com/raultedesco/flask-config-mpls.git
 
 #go to a folder flask-config-mpls
+
 $ cd flask-config-mpls
 
 #install dependencies
+
 $ pip3 install -r requirements.txt
 
 #run mpls_networks/flask-config-mpls/app/app.py
