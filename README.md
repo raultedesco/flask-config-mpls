@@ -1,7 +1,7 @@
 #flask-config-mpls
 
 Steps to Install and Run the App
----------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
 
 #install python3 
 youruser@debian:~$ sudo apt-get install python3
@@ -34,14 +34,17 @@ youruser@debian:~$ pip3 install -r requirements.txt
 and mpls_networks/flask-config-mpls/app/server_celery_manager.sh in diferents terminals
 
 Terminal 1
+----------
 youruser@debian:~$ cd mpls_networks/flask-config-mpls/app/
 youruser@debian:~$ python3 app.py
 
 Terminal 2
+----------
 youruser@debian:~$ cd mpls_networks/flask-config-mpls/app/
 youruser@debian:~$ sudo ./server_celery_manager.sh
 
 #in a web browser go to http://localhost:12346/
+
 #enjoy!
 
 
