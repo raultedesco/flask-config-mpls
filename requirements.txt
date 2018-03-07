@@ -20,7 +20,6 @@ kombu==4.1.0
 MarkupSafe==1.0
 netmiko==2.0.2
 paramiko==2.4.0
-pkg-resources==0.0.0
 ply==3.11
 pyasn1==0.4.2
 pycparser==2.18
