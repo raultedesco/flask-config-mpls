@@ -332,6 +332,7 @@ $(".dropdown-menu li a").click(function(){
        case ' List de Usuarios':
             //plot1.destroy();
             hide_tables();
+            $('#device_user').hide();
             $('#t1').show();
             $('#config_table').show();
             table='config_table'
@@ -342,6 +343,7 @@ $(".dropdown-menu li a").click(function(){
        case ' List de Dispositivos':
             //plot1.destroy();
             hide_tables();
+            $('#device_user').hide();
             $('#t2').show();
             $('#config_table_devices').show();
             table='config_table_devices'
