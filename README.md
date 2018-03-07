@@ -56,7 +56,7 @@ $ sudo ./server_celery_manager.sh
 
 #enjoy!
 
-![Mpls Networks](https://drive.google.com/open?id=1Z5ja_olugXn3TmPafUypNDNv2QpzcPvr)
+
 
 
 Creditos
